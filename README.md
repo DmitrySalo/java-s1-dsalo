@@ -1,93 +1,116 @@
-# java-s1-dsalo
+## 1. Сущность и функционал
+   Сущность **User**
+   Сущность User представляет пользователя в системе. Она включает следующие поля:
+   - **id:** Уникальный идентификатор пользователя (строка, генерируется автоматически как UUID).
+   - **firstName:** Имя пользователя (строка, обязательно).
+   - **lastName:** Фамилия пользователя (строка, обязательно).
+   - **email:** Электронная почта пользователя (строка, обязательно, валидируется как email).
+   - **phoneNumber:** Номер телефона пользователя (строка, обязательно).
+   - **createdAt:** Дата и время создания пользователя (LocalDateTime, генерируется автоматически).
 
+   Функционал
+   - **API предоставляет единственную операцию:** создание нового пользователя via POST-запрос.
+   - **Создание пользователя:** Принимает данные в JSON-формате, валидирует их, генерирует ID и дату создания, сохраняет в in-memory Map (HashMap) и возвращает созданного пользователя.
+   - **Обработка ошибок:** Глобальный обработчик ошибок (ErrorResolver) перехватывает исключения: IllegalArgumentException (для валидационных ошибок) возвращает HTTP 400 с деталями.
+   RuntimeException (для системных ошибок) возвращает HTTP 500 с деталями.
 
+## 2. Используемый стек технологий
+   - Язык программирования: Java 25.
+   - Фреймворк: Spring Boot 3.5.6 (включая starters для web, data-jpa, validation, security, actuator, oauth2-resource-server, oauth2-client).
+   - Сборка и зависимости: Gradle (с плагинами spring-boot, dependency-management). Ключевые библиотеки:Spring Boot Starters: web, web-services, jetty (как сервер вместо Tomcat), security, retry, aspects.
+   - База данных: PostgreSQL (runtime), Flyway для миграций (хотя в текущей реализации используется in-memory Map, а не реальная БД).
+   - ORM: Spring Data JPA, Hibernate (с jpamodelgen), Blaze Persistence для расширенных запросов.
+   - Маппинг: MapStruct 1.6.3 для конвертации объектов.
+   - Логирование: Logback.
+   - Мониторинг: Micrometer с Prometheus.
+   - Другое: Lombok для boilerplate-кода, Jakarta Validation для валидации.
+   - Сервер: Jetty.
+   - Хранение данных: In-memory.
+   - Дополнительно: Поддержка аспектов (AOP), retry-механизмов и OAuth2 (не используются в текущем коде).
 
-## Getting started
+## 3. Инструкции по запуску
+   **Требования:**
+   - Java 25 (или совместимая версия).
+   - Gradle (установлен локально или через wrapper).
+   - Опционально: PostgreSQL (если планируется переход на реальную БД; в текущей версии не требуется).
 
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
-
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
-
-## Add your files
-
-- [ ] [Create](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#create-a-file) or [upload](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#upload-a-file) files
-- [ ] [Add files using the command line](https://docs.gitlab.com/ee/gitlab-basics/add-file.html#add-a-file-using-the-command-line) or push an existing Git repository with the following command:
-
+**Шаги по запуску:**
+1. Клонируйте репозиторий (если применимо) или скопируйте код в проект.
+2. Соберите проект:
+```shell
+   ./gradlew build
 ```
-cd existing_repo
-git remote add origin https://gitlab.31338.ru/study/java/stream-1/java-s1-dsalo.git
-git branch -M main
-git push -uf origin main
+3. Запустите приложение:
+```shell
+  ./gradlew bootRun
 ```
 
-## Integrate with your tools
+**Доступ к API:** Приложение запускается на порту 8080 по умолчанию. Базовый URL: http://localhost:8080/api/v1/users.
 
-- [ ] [Set up project integrations](https://gitlab.31338.ru/study/java/stream-1/java-s1-dsalo/-/settings/integrations)
+**Мониторинг:** Actuator endpoints доступны по /actuator (например, /actuator/health для проверки статуса).
 
-## Collaborate with your team
+## 4. Примеры запросов
+   API использует JSON для запросов и ответов. Тестируйте с помощью инструментов вроде Postman или curl.
+   **Пример успешного создания пользователя (POST /api/v1/users)**
+   **Запрос:**
+   
+```text
+POST http://localhost:8080/api/v1/users
+Content-Type: application/json
 
-- [ ] [Invite team members and collaborators](https://docs.gitlab.com/ee/user/project/members/)
-- [ ] [Create a new merge request](https://docs.gitlab.com/ee/user/project/merge_requests/creating_merge_requests.html)
-- [ ] [Automatically close issues from merge requests](https://docs.gitlab.com/ee/user/project/issues/managing_issues.html#closing-issues-automatically)
-- [ ] [Enable merge request approvals](https://docs.gitlab.com/ee/user/project/merge_requests/approvals/)
-- [ ] [Set auto-merge](https://docs.gitlab.com/ee/user/project/merge_requests/merge_when_pipeline_succeeds.html)
+{
+    "firstName": "John",
+    "lastName": "Doe",
+    "email": "john.doe@example.com",
+    "phoneNumber": "+1234567890"
+}
+```
 
-## Test and Deploy
+**Ответ (HTTP 200):**
+```text
+{
+    "id": "uuid-generated-string",
+    "firstName": "John",
+    "lastName": "Doe",
+    "email": "john.doe@example.com",
+    "phoneNumber": "+1234567890",
+    "createdAt": "2025-10-13T14:45:00"
+}
+```
 
-Use the built-in continuous integration in GitLab.
+**Пример ошибки валидации (некорректный email)**
+**Запрос:**
+```text
+POST http://localhost:8080/api/v1/users
+Content-Type: application/json
 
-- [ ] [Get started with GitLab CI/CD](https://docs.gitlab.com/ee/ci/quick_start/index.html)
-- [ ] [Analyze your code for known vulnerabilities with Static Application Security Testing (SAST)](https://docs.gitlab.com/ee/user/application_security/sast/)
-- [ ] [Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy](https://docs.gitlab.com/ee/topics/autodevops/requirements.html)
-- [ ] [Use pull-based deployments for improved Kubernetes management](https://docs.gitlab.com/ee/user/clusters/agent/)
-- [ ] [Set up protected environments](https://docs.gitlab.com/ee/ci/environments/protected_environments.html)
+{
+    "firstName": "John",
+    "lastName": "Doe",
+    "email": "invalid-email",
+    "phoneNumber": "+1234567890"
+}
+```
 
-***
+**Ответ (HTTP 400):**
+```text
+{
+    "httpCode": "BAD_REQUEST",
+    "path": "/api/v1/users",
+    "errorCode": "dfe99c9e-001",
+    "msg": "Invalid email format",
+    "timestamp": 1728917100000
+}
+```
 
-# Editing this README
-
-When you're ready to make this README your own, just edit this file and use the handy template below (or feel free to structure it however you want - this is just a starting point!). Thanks to [makeareadme.com](https://www.makeareadme.com/) for this template.
-
-## Suggestions for a good README
-
-Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information.
-
-## Name
-Choose a self-explaining name for your project.
-
-## Description
-Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
-
-## Badges
-On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
-
-## Visuals
-Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
-
-## Installation
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
-
-## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
-
-## Support
-Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
-
-## Roadmap
-If you have ideas for releases in the future, it is a good idea to list them in the README.
-
-## Contributing
-State if you are open to contributions and what your requirements are for accepting them.
-
-For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
-
-You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
-
-## Authors and acknowledgment
-Show your appreciation to those who have contributed to the project.
-
-## License
-For open source projects, say how it is licensed.
-
-## Project status
-If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
+**Пример системной ошибки (если use case выбросит RuntimeException)**
+**Ответ (HTTP 500):**
+```text
+{
+    "httpCode": "INTERNAL_SERVER_ERROR",
+    "path": "/api/v1/users",
+    "errorCode": "dfe99c9e-002",
+    "msg": "Unexpected error occurred",
+    "timestamp": 1728917100000
+}
+```
