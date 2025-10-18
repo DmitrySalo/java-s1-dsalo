@@ -1,0 +1,36 @@
+server:
+  port: 8081
+  jetty:
+    connection-idle-timeout: 60000
+    max-connections: 200
+    threads:
+      min: 8
+      max: 200
+      idle-timeout: 60000
+
+management:
+  server:
+    port: 8080
+  endpoints:
+    web:
+      base-path: /
+      exposure:
+        include: '*'
+  endpoint:
+    health:
+      show-details: always
+      probes:
+        enabled: true
+  metrics:
+    tags:
+      application: my-scents
+spring:
+  main:
+    banner-mode: off
+  jpa:
+    hibernate:
+      ddl-auto: none
+
+logging:
+  level:
+    root: INFO
