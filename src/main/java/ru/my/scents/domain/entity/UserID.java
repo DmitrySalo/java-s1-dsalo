@@ -1,10 +1,9 @@
 package ru.my.scents.domain.entity;
 
 import java.util.Objects;
+import java.util.UUID;
 import java.util.regex.Pattern;
-import lombok.Getter;
 
-@Getter
 public class UserID {
 
     private static final Pattern UUID_V4_REGEX = Pattern.compile(
@@ -28,18 +27,11 @@ public class UserID {
             throw new UserIDValidationException("ID не соответствует шаблону!");
         }
 
-        if (normalized.length() != 30) {
-            throw new UserIDValidationException("ID превышает длину в 30 символов!");
-        }
-
         return new UserID(id);
     }
 
-    private static class UserIDValidationException extends RuntimeException {
-
-        private UserIDValidationException(String message) {
-            super(message);
-        }
+    public UUID getValue() {
+        return UUID.fromString(value);
     }
 
     @Override
@@ -54,5 +46,12 @@ public class UserID {
     @Override
     public int hashCode() {
         return Objects.hashCode(value);
+    }
+
+    private static class UserIDValidationException extends RuntimeException {
+
+        private UserIDValidationException(String message) {
+            super(message);
+        }
     }
 }

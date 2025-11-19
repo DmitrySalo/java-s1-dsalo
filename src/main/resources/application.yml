@@ -35,9 +35,11 @@ spring:
     name: my-scents
   main:
     banner-mode: off
-  jpa:
-    hibernate:
-      ddl-auto: none
+  data:
+    mongodb:
+      uri: mongodb://admin:password@localhost:27017/myscentsdb?authSource=admin
+  lifecycle:
+    timeout-per-shutdown-phase: 60s
 
 logging:
   queue:

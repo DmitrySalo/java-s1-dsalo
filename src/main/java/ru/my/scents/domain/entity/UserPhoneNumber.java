@@ -3,13 +3,12 @@ package ru.my.scents.domain.entity;
 import java.util.Objects;
 import java.util.regex.Pattern;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 
 @Getter
 public final class UserPhoneNumber {
 
     private static final Pattern PHONE_NUMBER_PATTERN = Pattern.compile(
-            "^\\d{10}$"
+            "^\\d{11}$"
     );
 
     private final String value;
@@ -30,7 +29,7 @@ public final class UserPhoneNumber {
             throw new PhoneNumberValidationException("Номер телефона не соответствует шаблону!");
         }
 
-        return new UserPhoneNumber(CountryCode.RU + normalized);
+        return new UserPhoneNumber(normalized);
     }
 
     @Override
@@ -52,14 +51,5 @@ public final class UserPhoneNumber {
         private PhoneNumberValidationException(String message) {
             super(message);
         }
-    }
-
-    @Getter
-    @RequiredArgsConstructor
-    private enum CountryCode {
-
-        RU("+7");
-
-        private final String countryCode;
     }
 }

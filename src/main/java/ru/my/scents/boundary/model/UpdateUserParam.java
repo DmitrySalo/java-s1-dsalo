@@ -1,6 +1,6 @@
 package ru.my.scents.boundary.model;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import lombok.Getter;
 
 @Getter
@@ -11,10 +11,10 @@ public class UpdateUserParam {
     private final String lastName;
     private final String email;
     private final String phoneNumber;
-    private final LocalDateTime updatedAt;
+    private final Instant updatedAt;
 
     public UpdateUserParam(String id, String firstName, String lastName, String email, String phoneNumber,
-                           LocalDateTime updatedAt) {
+                           Instant updatedAt) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
