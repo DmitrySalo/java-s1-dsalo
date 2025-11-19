@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.my.scents.boundary.model.CreateUserParam;
 import ru.my.scents.boundary.model.UpdateUserParam;
@@ -14,11 +15,14 @@ import ru.my.scents.domain.entity.UserEmail;
 import ru.my.scents.domain.entity.UserID;
 import ru.my.scents.domain.entity.UserName;
 import ru.my.scents.domain.entity.UserPhoneNumber;
+import ru.my.scents.infra.logger.Logger;
 
 @Service
+@RequiredArgsConstructor
 public class UserUseCaseImpl implements UserUseCase {
 
-    private final Map<UserID, User> bookings = new HashMap<>();
+    private final Logger logger;
+    private final Map<UserID, User> users = new HashMap<>();
 
     @Override
     public User create(CreateUserParam params) {
@@ -31,7 +35,8 @@ public class UserUseCaseImpl implements UserUseCase {
                 .phoneNumber(UserPhoneNumber.of(params.getPhoneNumber()))
                 .createdAt(LocalDateTime.now())
                 .build();
-        bookings.put(result.getId(), result);
+        users.put(result.getId(), result);
+        logger.info(String.format("User created with id %s", result.getId()));
         return result;
     }
 
@@ -49,15 +54,15 @@ public class UserUseCaseImpl implements UserUseCase {
                 .updatedAt(params.getUpdatedAt())
                 .build();
 
-        bookings.put(result.getId(), result);
-
+        users.put(result.getId(), result);
+        logger.info(String.format("User updated with id %s", result.getId()));
         return result;
     }
 
     @Override
     public User get(String userId) {
         UserID id = UserID.of(userId);
-        User user = bookings.get(id);
+        User user = users.get(id);
         if (user == null) {
             throw new EntityNotFoundException(userId);
         }

@@ -6,12 +6,12 @@ import lombok.Getter;
 @Getter
 public class UpdateUserParam {
 
-    private String id;
-    private String firstName;
-    private String lastName;
-    private String email;
-    private String phoneNumber;
-    private LocalDateTime updatedAt;
+    private final String id;
+    private final String firstName;
+    private final String lastName;
+    private final String email;
+    private final String phoneNumber;
+    private final LocalDateTime updatedAt;
 
     public UpdateUserParam(String id, String firstName, String lastName, String email, String phoneNumber,
                            LocalDateTime updatedAt) {

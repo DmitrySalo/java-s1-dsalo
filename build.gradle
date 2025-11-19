@@ -25,6 +25,7 @@ dependencies {
     implementation "org.springframework.boot:spring-boot-starter-jetty"
     implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'ch.qos.logback:logback-classic'
+    implementation 'net.logstash.logback:logstash-logback-encoder:9.0'
 
     implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'
     implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'

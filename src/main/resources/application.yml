@@ -15,7 +15,7 @@ management:
     web:
       base-path: /
       exposure:
-        include: '*'
+        include: prometheus, health, metrics
   endpoint:
     health:
       show-details: always
@@ -24,7 +24,15 @@ management:
   metrics:
     tags:
       application: my-scents
+    distribution:
+      percentiles-histogram:
+        http:
+          server:
+            requests: true
+
 spring:
+  application:
+    name: my-scents
   main:
     banner-mode: off
   jpa:
@@ -32,5 +40,5 @@ spring:
       ddl-auto: none
 
 logging:
-  level:
-    root: INFO
+  queue:
+    capacity: 100

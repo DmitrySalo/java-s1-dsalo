@@ -6,14 +6,15 @@ import lombok.Getter;
 @Getter
 public class CreateUserParam {
 
-    private String id;
-    private String firstName;
-    private String lastName;
-    private String email;
-    private String phoneNumber;
-    private LocalDateTime createdAt;
+    private final String id;
+    private final String firstName;
+    private final String lastName;
+    private final String email;
+    private final String phoneNumber;
+    private final LocalDateTime createdAt;
 
-    public CreateUserParam(String id, String firstName, String lastName, String email, String phoneNumber, LocalDateTime createdAt) {
+    public CreateUserParam(String id, String firstName, String lastName, String email, String phoneNumber,
+                           LocalDateTime createdAt) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
