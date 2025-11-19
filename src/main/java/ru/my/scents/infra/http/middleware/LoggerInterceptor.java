@@ -3,13 +3,14 @@ package ru.my.scents.infra.http.middleware;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.Set;
-import java.util.UUID;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.MDC;
 import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
+import ru.my.scents.infra.logger.LogKeys;
 
 @Slf4j
 @Component
@@ -17,8 +18,7 @@ public class LoggerInterceptor implements HandlerInterceptor {
 
     private static final String REQUEST_START_TIME = "requestStartTime";
     private static final String REQUEST_ID = "requestId";
-
-    private final Set<String> IMPORTANT_HEADERS = Set.of("Content-Type", "Content-Length", "Authorization",
+    private static final Set<String> IMPORTANT_HEADERS = Set.of("Content-Type", "Content-Length", "Authorization",
             "Accept", "Accept-Language", "X-Forwarded-For");
 
     @Override
@@ -26,7 +26,7 @@ public class LoggerInterceptor implements HandlerInterceptor {
                              @NonNull HttpServletResponse response,
                              @NonNull Object handler) {
 
-        String requestId = UUID.randomUUID().toString().substring(0, 8);
+        String requestId = MDC.get(LogKeys.REQUEST_ID.getValue());
         request.setAttribute(REQUEST_ID, requestId);
 
         long startTime = System.currentTimeMillis();
