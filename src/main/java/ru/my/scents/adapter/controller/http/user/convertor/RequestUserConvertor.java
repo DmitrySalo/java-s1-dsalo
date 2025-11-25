@@ -1,6 +1,7 @@
 package ru.my.scents.adapter.controller.http.user.convertor;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
+import java.util.UUID;
 import lombok.experimental.UtilityClass;
 import ru.my.scents.adapter.controller.http.user.request.CreateUserRequest;
 import ru.my.scents.adapter.controller.http.user.request.UpdateUserRequest;
@@ -11,12 +12,12 @@ import ru.my.scents.boundary.model.UpdateUserParam;
 public class RequestUserConvertor {
 
     public static CreateUserParam createRequestToModel(CreateUserRequest request) {
-        return new CreateUserParam(null, request.firstName(), request.lastName(), request.email(),
-                request.phoneNumber(), LocalDateTime.now());
+        return new CreateUserParam(UUID.randomUUID().toString(), request.firstName(), request.lastName(), request.email(),
+                request.phoneNumber(), Instant.now());
     }
 
     public static UpdateUserParam updateRequestToModel(UpdateUserRequest request) {
         return new UpdateUserParam(request.id(), request.firstName(), request.lastName(), request.email(),
-                request.phoneNumber(), LocalDateTime.now());
+                request.phoneNumber(), Instant.now());
     }
 }

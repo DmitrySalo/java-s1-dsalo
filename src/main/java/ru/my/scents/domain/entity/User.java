@@ -1,6 +1,6 @@
 package ru.my.scents.domain.entity;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.Objects;
 import lombok.Builder;
 import lombok.Getter;
@@ -9,16 +9,16 @@ import lombok.Getter;
 @Getter
 public class User {
 
-    private UserID id;
-    private UserName firstName;
-    private UserName lastName;
-    private UserEmail email;
-    private UserPhoneNumber phoneNumber;
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
+    private final UserID id;
+    private final UserName firstName;
+    private final UserName lastName;
+    private final UserEmail email;
+    private final UserPhoneNumber phoneNumber;
+    private final Instant createdAt;
+    private final Instant updatedAt;
 
     public User(UserID id, UserName firstName, UserName lastName, UserEmail email, UserPhoneNumber phoneNumber,
-                LocalDateTime createdAt, LocalDateTime updatedAt) {
+                Instant createdAt, Instant updatedAt) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;

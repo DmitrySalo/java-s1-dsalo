@@ -10,17 +10,17 @@ import ru.my.scents.domain.entity.User;
 public class ResponseUserConvertor {
 
     public static CreateUserResponse createResultToResponse(User result) {
-        return new CreateUserResponse(result.getId().getValue(), result.getFirstName().getValue(),
+        return new CreateUserResponse(result.getId().getValue().toString(), result.getFirstName().getValue(),
                 result.getLastName().getValue(), result.getEmail().getValue(), result.getPhoneNumber().getValue());
     }
 
     public static UpdateUserResponse updateResultToResponse(User result) {
-        return new UpdateUserResponse(result.getId().getValue(), result.getFirstName().getValue(),
+        return new UpdateUserResponse(result.getId().getValue().toString(), result.getFirstName().getValue(),
                 result.getLastName().getValue(), result.getEmail().getValue(), result.getPhoneNumber().getValue());
     }
 
     public static GetUserResponse getResultToResponse(User result) {
-        return new GetUserResponse(result.getId().getValue(), result.getFirstName().getValue(),
+        return new GetUserResponse(result.getId().getValue().toString(), result.getFirstName().getValue(),
                 result.getLastName().getValue(), result.getEmail().getValue(), result.getPhoneNumber().getValue());
     }
 }
