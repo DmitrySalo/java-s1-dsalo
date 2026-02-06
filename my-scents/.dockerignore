@@ -1,0 +1,65 @@
+# Build artifacts
+target/
+*.jar
+*.war
+*.class
+
+# Git
+.git/
+.github/
+../.gitignore
+.gitattributes
+
+# IDE
+.vscode/
+.settings/
+.classpath
+.project
+.factorypath
+.idea/
+*.iml
+
+# Maven
+.mvn/wrapper/maven-wrapper.jar
+
+# Documentation
+*.md
+docs/
+
+# Docker
+docker-compose.yaml
+docker-compose.yml
+my-scents/Dockerfile
+.dockerignore
+
+# IMPORTANT: Do NOT ignore entrypoint.sh - it's needed for Docker build
+!entrypoint.sh
+
+# Environment
+.env
+.env.*
+
+# Test and mock data
+my-scents/gripmock/
+scripts/
+etc/
+
+# CI/CD
+gitlab/
+.gitlab-ci.yml
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+logs/
+*.log
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+*.swp
+*.swo
+*~

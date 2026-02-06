@@ -1,0 +1,17 @@
+{
+  "service": "FragranceService",
+  "method": "GetFragrance",
+  "input": {
+    "equals": {
+      "fragrance_id": "empty_id"
+    }
+  },
+  "output": {
+    "data": {
+      "error": {
+        "http_code": "500",
+        "msg": "ID парфюма обязателен!"
+      }
+    }
+  }
+}

@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+package ru.my.scents.grpc.fragrance;
+
+option java_multiple_files = true;
+option java_package = "ru.my.scents.fragrance.adapter.controller.grpc.fragrance.proto";
+
+enum FragranceAvailabilityStatus {
+  FRAGRANCE_AVAILABILITY_STATUS_UNSPECIFIED = 0;
+  FRAGRANCE_AVAILABILITY_STATUS_AVAILABLE = 1;
+  FRAGRANCE_AVAILABILITY_STATUS_UNAVAILABLE = 2;
+}

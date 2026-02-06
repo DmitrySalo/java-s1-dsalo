@@ -1,0 +1,28 @@
+{
+  "service": "FragranceService",
+  "method": "GetFragrance",
+  "input": {
+    "equals": {
+      "fragrance_id": "5689ad72-5bfd-448e-8eb4-b67b95ff4dc9"
+    }
+  },
+  "output": {
+    "delay": "3s",
+    "data": {
+      "data": {
+        "id": "5689ad72-5bfd-448e-8eb4-b67b95ff4dc9",
+        "name": "Fahrenheit Absolute",
+        "resume": "Очень медитативный аромат",
+        "rating": 8,
+        "type": [2, 15],
+        "gender": 1,
+        "season": [3, 4, 5, 6],
+        "longevity": 4,
+        "sillage": 3,
+        "availability": 1,
+        "created_at": "2026-01-23T11:00:00Z",
+        "updated_at": "2026-01-24T12:00:00Z"
+      }
+    }
+  }
+}

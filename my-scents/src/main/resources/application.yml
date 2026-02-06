@@ -1,0 +1,70 @@
+server:
+  port: 8081
+  jetty:
+    connection-idle-timeout: 60000
+    max-connections: 200
+    threads:
+      min: 8
+      max: 200
+      idle-timeout: 60000
+
+management:
+  server:
+    port: 8080
+  endpoints:
+    web:
+      base-path: /
+      exposure:
+        include: prometheus, health, metrics
+  endpoint:
+    health:
+      show-details: always
+      probes:
+        enabled: true
+  metrics:
+    tags:
+      application: my-scents
+    distribution:
+      percentiles-histogram:
+        http:
+          server:
+            requests: true
+
+spring:
+  application:
+    name: my-scents
+  main:
+    banner-mode: off
+  data:
+    mongodb:
+      uri: mongodb://admin:password@localhost:27017/myscentsdb?authSource=admin
+  lifecycle:
+    timeout-per-shutdown-phase: 60s
+  grpc:
+    server:
+      servlet:
+        enabled: false
+      enabled: false
+  autoconfigure:
+    exclude:
+      - org.springframework.boot.grpc.server.autoconfigure.GrpcServerAutoConfiguration
+
+logging:
+  queue:
+    capacity: 100
+
+grpc:
+  server:
+    port: 50053
+    shutdown-grace-period: 30s
+  fragrance-service:
+    host: localhost
+    port: 50051
+    deadline: 60s
+    retry:
+      max-attempts: 10
+      initial-backoff: 5000ms
+      max-backoff: 10000ms
+      multiplier: 1.5
+      per-attempt-timeout: 10000ms
+      thread-pool-size: 1

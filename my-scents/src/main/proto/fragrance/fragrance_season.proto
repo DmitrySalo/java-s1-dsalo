@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package ru.my.scents.grpc.fragrance;
+
+option java_multiple_files = true;
+option java_package = "ru.my.scents.fragrance.adapter.controller.grpc.fragrance.proto";
+
+enum FragranceSeason {
+  FRAGRANCE_SEASON_UNSPECIFIED = 0;
+  FRAGRANCE_SEASON_SPRING = 1;
+  FRAGRANCE_SEASON_SUMMER = 2;
+  FRAGRANCE_SEASON_FALL = 3;
+  FRAGRANCE_SEASON_WINTER = 4;
+  FRAGRANCE_SEASON_DAY = 5;
+  FRAGRANCE_SEASON_NIGHT = 6;
+}
