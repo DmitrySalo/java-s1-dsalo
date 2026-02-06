@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package ru.my.scents.grpc.fragrance;
+
+option java_multiple_files = true;
+option java_package = "ru.my.scents.fragrance.adapter.controller.grpc.fragrance.proto";
+
+enum FragranceLongevity {
+  FRAGRANCE_LONGEVITY_UNSPECIFIED = 0;
+  FRAGRANCE_LONGEVITY_VERY_WEAK = 1;
+  FRAGRANCE_LONGEVITY_WEAK = 2;
+  FRAGRANCE_LONGEVITY_MIDDLE = 3;
+  FRAGRANCE_LONGEVITY_STRONG = 4;
+  FRAGRANCE_LONGEVITY_ETERNAL = 5;
+}

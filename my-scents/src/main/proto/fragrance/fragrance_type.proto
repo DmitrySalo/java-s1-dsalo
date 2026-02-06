@@ -1,0 +1,27 @@
+syntax = "proto3";
+
+package ru.my.scents.grpc.fragrance;
+
+option java_multiple_files = true;
+option java_package = "ru.my.scents.fragrance.adapter.controller.grpc.fragrance.proto";
+
+enum FragranceType {
+  FRAGRANCE_TYPE_UNSPECIFIED = 0;
+  FRAGRANCE_TYPE_ORIENTAL = 1;
+  FRAGRANCE_TYPE_FLORAL = 2;
+  FRAGRANCE_TYPE_CHYPRE = 3;
+  FRAGRANCE_TYPE_FOUGERE = 4;
+  FRAGRANCE_TYPE_WOODY = 5;
+  FRAGRANCE_TYPE_AQUATIC = 6;
+  FRAGRANCE_TYPE_FRUITY = 7;
+  FRAGRANCE_TYPE_CITRUS = 8;
+  FRAGRANCE_TYPE_VANILLA = 9;
+  FRAGRANCE_TYPE_AMBER = 10;
+  FRAGRANCE_TYPE_LEATHER = 11;
+  FRAGRANCE_TYPE_ANIMALIC = 12;
+  FRAGRANCE_TYPE_SMOKY = 13;
+  FRAGRANCE_TYPE_BALSAMIC = 14;
+  FRAGRANCE_TYPE_MUSKY = 15;
+  FRAGRANCE_TYPE_SPICY = 16;
+  FRAGRANCE_TYPE_ALDEHYDE = 17;
+}

@@ -1,0 +1,84 @@
+version: "3.8"
+
+services:
+  mongodb:
+    image: mongo:8-noble
+    container_name: myscentsdb-2
+    restart: unless-stopped
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: password
+      MONGO_INITDB_DATABASE: myscentsdb
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+      - mongodb_config:/data/configdb
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/admin -u admin -p password --quiet
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+  fragrance-gripmock:
+    image: bavix/gripmock:${GRIPMOCK_VERSION:-latest}
+    container_name: fragrance-gripmock
+    restart: unless-stopped
+    ports:
+      - "${FRAGRANCE_GRPC_PORT:-50051}:4770"
+      - "${FRAGRANCE_ADMIN_PORT:-4771}:4771"
+    volumes:
+      - ${FRAGRANCE_PROTO_PATH:-./my-scents/src/main/proto}:/proto:ro
+      - ${FRAGRANCE_STUBS_PATH:-./my-scents/gripmock/fragrance/stubs}:/stubs:ro
+    command:
+      - "--stub=/stubs"
+      - "--imports=/proto"
+      - "/proto/fragrance/alert_response.proto"
+      - "/proto/fragrance/fragrance_availability_status.proto"
+      - "/proto/fragrance/fragrance_data.proto"
+      - "/proto/fragrance/fragrance_gender.proto"
+      - "/proto/fragrance/fragrance_longevity.proto"
+      - "/proto/fragrance/fragrance_season.proto"
+      - "/proto/fragrance/fragrance_service.proto"
+      - "/proto/fragrance/fragrance_sillage.proto"
+      - "/proto/fragrance/fragrance_type.proto"
+      - "/proto/fragrance/get_fragrance_request.proto"
+      - "/proto/fragrance/get_fragrance_response.proto"
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "-q", "http://localhost:4771/api/stubs"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 5s
+
+  my-scents-app:
+    build:
+      context: ./
+      dockerfile: my-scents/Dockerfile
+    container_name: myscents-app
+    restart: unless-stopped
+    depends_on:
+      mongodb:
+        condition: service_healthy
+      fragrance-gripmock:
+        condition: service_healthy
+    ports:
+      - "8080:8080"
+      - "8082:8081"
+      - "50053:50053"
+      - "9010:9010"
+    environment:
+      SPRING_DATA_MONGODB_URI: mongodb://admin:password@mongodb:27017/myscentsdb?authSource=admin
+      GRPC_FRAGRANCE_SERVICE_HOST: fragrance-gripmock
+      GRPC_FRAGRANCE_SERVICE_PORT: 4770
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8081/manage/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+volumes:
+  mongodb_data:
+  mongodb_config:

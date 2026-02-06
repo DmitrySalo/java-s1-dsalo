@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+package ru.my.scents.grpc.fragrance;
+
+option java_multiple_files = true;
+option java_package = "ru.my.scents.fragrance.adapter.controller.grpc.fragrance.proto";
+
+enum FragranceGender {
+  FRAGRANCE_GENDER_UNSPECIFIED = 0;
+  FRAGRANCE_GENDER_MALE = 1;
+  FRAGRANCE_GENDER_FEMALE = 2;
+  FRAGRANCE_GENDER_UNISEX = 3;
+}

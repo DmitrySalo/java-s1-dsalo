@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package ru.my.scents.grpc.fragrance;
+
+option java_multiple_files = true;
+option java_package = "ru.my.scents.fragrance.adapter.controller.grpc.fragrance.proto";
+
+import "fragrance/fragrance_data.proto";
+import "fragrance/alert_response.proto";
+
+message GetFragranceResponse {
+  oneof result {
+    FragranceData data = 1;
+    AlertResponse error = 2;
+  }
+}

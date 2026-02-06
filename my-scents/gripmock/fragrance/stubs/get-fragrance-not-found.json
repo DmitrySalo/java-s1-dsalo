@@ -1,0 +1,17 @@
+{
+  "service": "FragranceService",
+  "method": "GetFragrance",
+  "input": {
+    "equals": {
+      "fragrance_id": "00000000-0000-0000-0000-000000000000"
+    }
+  },
+  "output": {
+    "data": {
+      "error": {
+        "http_code": "404",
+        "msg": "Парфюм с ID 00000000-0000-0000-0000-000000000000 не найден"
+      }
+    }
+  }
+}

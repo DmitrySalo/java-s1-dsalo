@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+package ru.my.scents.grpc.fragrance;
+
+option java_multiple_files = true;
+option java_package = "ru.my.scents.fragrance.adapter.controller.grpc.fragrance.proto";
+
+enum FragranceSillage {
+  FRAGRANCE_SILLAGE_UNSPECIFIED = 0;
+  FRAGRANCE_SILLAGE_INTIMATE = 1;
+  FRAGRANCE_SILLAGE_MODERATE = 2;
+  FRAGRANCE_SILLAGE_STRONG = 3;
+  FRAGRANCE_SILLAGE_VERY_STRONG = 4;
+}
