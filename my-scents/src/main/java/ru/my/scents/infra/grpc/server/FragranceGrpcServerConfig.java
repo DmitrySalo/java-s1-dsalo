@@ -18,8 +18,8 @@ import ru.my.scents.infra.logger.Logger;
 @RequiredArgsConstructor
 public class FragranceGrpcServerConfig {
 
-    private Server server;
     private final Logger logger;
+    private Server server;
     private Duration shutdownGracePeriod;
     private int port;
 

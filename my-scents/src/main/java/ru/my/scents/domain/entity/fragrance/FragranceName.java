@@ -37,6 +37,7 @@ public final class FragranceName {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
+
         FragranceName name = (FragranceName) o;
         return Objects.equals(value, name.value);
     }
@@ -44,6 +45,11 @@ public final class FragranceName {
     @Override
     public int hashCode() {
         return Objects.hashCode(value);
+    }
+
+    @Override
+    public String toString() {
+        return value;
     }
 
     private static class FragranceNameValidationException extends RuntimeException {

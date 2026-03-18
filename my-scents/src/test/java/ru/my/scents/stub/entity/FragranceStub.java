@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 import lombok.experimental.UtilityClass;
 import ru.my.scents.domain.entity.fragrance.Fragrance;
 import ru.my.scents.domain.entity.fragrance.FragranceAvailabilityStatus;
+import ru.my.scents.domain.entity.fragrance.FragranceConcentration;
 import ru.my.scents.domain.entity.fragrance.FragranceGender;
 import ru.my.scents.domain.entity.fragrance.FragranceID;
 import ru.my.scents.domain.entity.fragrance.FragranceLongevity;
@@ -26,6 +27,7 @@ public class FragranceStub {
                 .id(FragranceID.of(UUID.randomUUID().toString()))
                 .name(FragranceName.of("Fahrenheit"))
                 .resume(FragranceResume.of("Прекрасно!"))
+                .concentration(FragranceConcentration.EAU_DE_TOILETTE)
                 .type(Set.of(FragranceType.FOUGERE))
                 .gender(FragranceGender.MALE)
                 .season(Set.of(FragranceSeason.DAY, FragranceSeason.NIGHT, FragranceSeason.WINTER,
@@ -43,6 +45,7 @@ public class FragranceStub {
                 .id(FragranceID.of(fragranceId))
                 .name(FragranceName.of("Fahrenheit"))
                 .resume(FragranceResume.of("Прекрасно!"))
+                .concentration(FragranceConcentration.EAU_DE_TOILETTE)
                 .type(Set.of(FragranceType.FOUGERE))
                 .gender(FragranceGender.MALE)
                 .season(Set.of(FragranceSeason.DAY, FragranceSeason.NIGHT, FragranceSeason.WINTER,
@@ -60,6 +63,7 @@ public class FragranceStub {
                 .id(FragranceID.of(UUID.randomUUID().toString()))
                 .name(FragranceName.of("Fahrenheit"))
                 .resume(FragranceResume.of("Прекрасно!"))
+                .concentration(FragranceConcentration.PARFUM)
                 .type(Set.of(FragranceType.FOUGERE))
                 .gender(FragranceGender.MALE)
                 .season(Set.of(FragranceSeason.DAY, FragranceSeason.NIGHT))
@@ -77,6 +81,7 @@ public class FragranceStub {
                 .id(FragranceID.of(UUID.randomUUID().toString()))
                 .name(FragranceName.of("All Types Fragrance"))
                 .resume(FragranceResume.of("Тестовый аромат со всеми типами"))
+                .concentration(FragranceConcentration.EAU_DE_COLOGNE)
                 .type(Arrays.stream(FragranceType.values()).collect(Collectors.toSet()))
                 .gender(FragranceGender.UNISEX)
                 .season(Set.of(FragranceSeason.SPRING))
@@ -93,6 +98,7 @@ public class FragranceStub {
                 .id(FragranceID.of(UUID.randomUUID().toString()))
                 .name(FragranceName.of("All Seasons Fragrance"))
                 .resume(FragranceResume.of("Тестовый аромат со всеми сезонами"))
+                .concentration(FragranceConcentration.EXTRACT_DE_PARFUM)
                 .type(Set.of(FragranceType.WOODY))
                 .gender(FragranceGender.UNISEX)
                 .season(Arrays.stream(FragranceSeason.values()).collect(Collectors.toSet()))
@@ -109,6 +115,7 @@ public class FragranceStub {
                 .id(FragranceID.of(UUID.randomUUID().toString()))
                 .name(FragranceName.of("Gender Test Fragrance"))
                 .resume(FragranceResume.of("Тестовый аромат"))
+                .concentration(FragranceConcentration.EAU_DE_TOILETTE)
                 .type(Set.of(FragranceType.FLORAL))
                 .gender(gender)
                 .season(Set.of(FragranceSeason.SPRING))
@@ -125,6 +132,7 @@ public class FragranceStub {
                 .id(FragranceID.of(UUID.randomUUID().toString()))
                 .name(FragranceName.of("Longevity Test Fragrance"))
                 .resume(FragranceResume.of("Тестовый аромат"))
+                .concentration(FragranceConcentration.EAU_DE_TOILETTE)
                 .type(Set.of(FragranceType.ORIENTAL))
                 .gender(FragranceGender.MALE)
                 .season(Set.of(FragranceSeason.WINTER))
@@ -141,6 +149,7 @@ public class FragranceStub {
                 .id(FragranceID.of(UUID.randomUUID().toString()))
                 .name(FragranceName.of("Sillage Test Fragrance"))
                 .resume(FragranceResume.of("Тестовый аромат"))
+                .concentration(FragranceConcentration.EAU_DE_TOILETTE)
                 .type(Set.of(FragranceType.AQUATIC))
                 .gender(FragranceGender.FEMALE)
                 .season(Set.of(FragranceSeason.SUMMER))
@@ -157,6 +166,7 @@ public class FragranceStub {
                 .id(FragranceID.of(UUID.randomUUID().toString()))
                 .name(FragranceName.of("Availability Test Fragrance"))
                 .resume(FragranceResume.of("Тестовый аромат"))
+                .concentration(FragranceConcentration.EAU_DE_TOILETTE)
                 .type(Set.of(FragranceType.CITRUS))
                 .gender(FragranceGender.UNISEX)
                 .season(Set.of(FragranceSeason.DAY))
@@ -168,11 +178,29 @@ public class FragranceStub {
                 .build();
     }
 
+    public static Fragrance createFragranceWithConcentration(FragranceConcentration concentration) {
+        return Fragrance.builder()
+                .id(FragranceID.of(UUID.randomUUID().toString()))
+                .name(FragranceName.of("Availability Test Fragrance"))
+                .resume(FragranceResume.of("Тестовый аромат"))
+                .concentration(concentration)
+                .type(Set.of(FragranceType.CITRUS))
+                .gender(FragranceGender.UNISEX)
+                .season(Set.of(FragranceSeason.DAY))
+                .sillage(FragranceSillage.INTIMATE)
+                .longevity(FragranceLongevity.WEAK)
+                .availability(FragranceAvailabilityStatus.AVAILABLE)
+                .rating(FragranceRating.of((byte) 5))
+                .createdAt(Instant.now())
+                .build();
+    }
+
     public static Fragrance createFragranceWithEmptyTypes() {
         return Fragrance.builder()
                 .id(FragranceID.of(UUID.randomUUID().toString()))
                 .name(FragranceName.of("Empty Types Fragrance"))
                 .resume(FragranceResume.of("Тестовый аромат без типов"))
+                .concentration(FragranceConcentration.EAU_DE_TOILETTE)
                 .type(Set.of())
                 .gender(FragranceGender.MALE)
                 .season(Set.of(FragranceSeason.SPRING))
@@ -189,6 +217,7 @@ public class FragranceStub {
                 .id(FragranceID.of(UUID.randomUUID().toString()))
                 .name(FragranceName.of("Empty Seasons Fragrance"))
                 .resume(FragranceResume.of("Тестовый аромат без сезонов"))
+                .concentration(FragranceConcentration.EAU_DE_TOILETTE)
                 .type(Set.of(FragranceType.WOODY))
                 .gender(FragranceGender.MALE)
                 .season(Set.of())

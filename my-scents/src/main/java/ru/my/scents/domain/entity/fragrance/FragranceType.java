@@ -3,6 +3,9 @@ package ru.my.scents.domain.entity.fragrance;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
+/**
+ * Тип парфюма.
+ */
 @Getter
 @RequiredArgsConstructor
 public enum FragranceType {

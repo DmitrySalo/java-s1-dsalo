@@ -41,6 +41,7 @@ public final class UserEmail {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
+
         UserEmail userEmail = (UserEmail) o;
         return Objects.equals(value, userEmail.value);
     }
@@ -48,6 +49,11 @@ public final class UserEmail {
     @Override
     public int hashCode() {
         return Objects.hashCode(value);
+    }
+
+    @Override
+    public String toString() {
+        return value;
     }
 
     private static class EmailValidationException extends RuntimeException {

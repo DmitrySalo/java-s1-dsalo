@@ -10,6 +10,10 @@ import ru.my.scents.domain.entity.user.User;
 public class ResponseUserConverter {
 
     public static CreateUserResponse createResultToResponse(User result) {
+        if (result == null) {
+            throw new IllegalArgumentException("Пользователь обязателен!");
+        }
+
         return CreateUserResponse.builder()
                 .id(result.getId().getValue().toString())
                 .firstName(result.getFirstName().getValue())
@@ -20,6 +24,10 @@ public class ResponseUserConverter {
     }
 
     public static UpdateUserResponse updateResultToResponse(User result) {
+        if (result == null) {
+            throw new IllegalArgumentException("Пользователь обязателен!");
+        }
+
         return UpdateUserResponse.builder()
                 .id(result.getId().getValue().toString())
                 .firstName(result.getFirstName().getValue())
@@ -30,6 +38,10 @@ public class ResponseUserConverter {
     }
 
     public static GetUserResponse getResultToResponse(User result) {
+        if (result == null) {
+            throw new IllegalArgumentException("Пользователь обязателен!");
+        }
+
         return GetUserResponse.builder()
                 .id(result.getId().getValue().toString())
                 .firstName(result.getFirstName().getValue())

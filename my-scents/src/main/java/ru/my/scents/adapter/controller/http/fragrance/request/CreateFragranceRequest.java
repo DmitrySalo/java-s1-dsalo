@@ -7,6 +7,7 @@ import lombok.Builder;
 public record CreateFragranceRequest(String name,
                                      Byte rating,
                                      String resume,
+                                     String concentration,
                                      Set<String> type,
                                      String gender,
                                      Set<String> season,

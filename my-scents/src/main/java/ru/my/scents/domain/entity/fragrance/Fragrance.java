@@ -14,6 +14,7 @@ public class Fragrance {
     private final FragranceName name;
     private final FragranceRating rating;
     private final FragranceResume resume;
+    private final FragranceConcentration concentration;
     private final Set<FragranceType> type;
     private final FragranceGender gender;
     private final Set<FragranceSeason> season;
@@ -28,6 +29,7 @@ public class Fragrance {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
+
         Fragrance fragrance = (Fragrance) o;
         return Objects.equals(id, fragrance.id);
     }

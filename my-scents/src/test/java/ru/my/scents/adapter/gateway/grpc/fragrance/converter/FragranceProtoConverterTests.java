@@ -14,6 +14,7 @@ import org.junit.jupiter.params.provider.EnumSource;
 import ru.my.scents.configuration.BaseTest;
 import ru.my.scents.domain.entity.fragrance.Fragrance;
 import ru.my.scents.domain.entity.fragrance.FragranceAvailabilityStatus;
+import ru.my.scents.domain.entity.fragrance.FragranceConcentration;
 import ru.my.scents.domain.entity.fragrance.FragranceGender;
 import ru.my.scents.domain.entity.fragrance.FragranceLongevity;
 import ru.my.scents.domain.entity.fragrance.FragranceSillage;
@@ -37,6 +38,7 @@ public class FragranceProtoConverterTests extends BaseTest {
                 () -> assertThat(fragranceData.getId()).isEqualTo(fragrance.getId().getValue().toString()),
                 () -> assertThat(fragranceData.getName()).isEqualTo(fragrance.getName().getValue()),
                 () -> assertThat(fragranceData.getResume()).isEqualTo(fragrance.getResume().getValue()),
+                () -> assertThat(fragranceData.getConcentration().name()).contains(fragrance.getConcentration().name()),
                 () -> assertThat(fragranceData.getRating()).isEqualTo(fragrance.getRating().getValue()),
                 () -> assertThat(fragranceData.getGender().name()).contains(fragrance.getGender().name()),
                 () -> assertThat(fragranceData.getAvailability().name()).contains(fragrance.getAvailability().name()),
@@ -63,6 +65,7 @@ public class FragranceProtoConverterTests extends BaseTest {
                 () -> assertThat(fragranceData.getId()).isEqualTo(fragrance.getId().getValue().toString()),
                 () -> assertThat(fragranceData.getName()).isEqualTo(fragrance.getName().getValue()),
                 () -> assertThat(fragranceData.getResume()).isEqualTo(fragrance.getResume().getValue()),
+                () -> assertThat(fragranceData.getConcentration().name()).contains(fragrance.getConcentration().name()),
                 () -> assertThat(fragranceData.getRating()).isEqualTo(fragrance.getRating().getValue()),
                 () -> assertThat(fragranceData.getGender().name()).contains(fragrance.getGender().name()),
                 () -> assertThat(fragranceData.getAvailability().name()).contains(fragrance.getAvailability().name()),
@@ -113,16 +116,16 @@ public class FragranceProtoConverterTests extends BaseTest {
         assertThat(fragrance.getType()).isEmpty();
     }
 
-    @DisplayName(value = "FragranceType конвертируется в null, если proto имеет значение FRAGRANCE_TYPE_UNSPECIFIED")
+    @DisplayName(value = "FragranceConcentration конвертируется в null, если proto имеет значение FRAGRANCE_CONCENTRATION_UNSPECIFIED")
     @Test
-    public void typeConvertedToNullWhenUnrecognizedTest() {
-        FragranceData fragranceData = FragranceDataStub.createFragranceWithType(
-                ru.my.scents.fragrance.adapter.controller.grpc.fragrance.proto.FragranceType.FRAGRANCE_TYPE_UNSPECIFIED);
+    public void typeConvertedToNullWhenFragranceConcentrationUnspecifiedTest() {
+        FragranceData fragranceData = FragranceDataStub.createFragranceWithConcentration(
+                ru.my.scents.fragrance.adapter.controller.grpc.fragrance.proto.FragranceConcentration.FRAGRANCE_CONCENTRATION_UNSPECIFIED);
 
         Fragrance fragrance = FragranceProtoConverter.toDomain(fragranceData);
 
         assertThat(fragrance).isNotNull();
-        assertThat(fragrance.getType()).isEmpty();
+        assertThat(fragrance.getConcentration()).isNull();
     }
 
     @DisplayName(value = "FragranceGender конвертируется в null, если proto имеет значение FRAGRANCE_GENDER_UNSPECIFIED")
@@ -244,6 +247,17 @@ public class FragranceProtoConverterTests extends BaseTest {
         FragranceData fragranceData = FragranceProtoConverter.toProto(fragrance);
 
         assertThat(fragranceData.getGender().name()).contains(gender.name());
+    }
+
+    @DisplayName(value = "Успешно конвертируем все значения FragranceConcentration из entity в proto")
+    @ParameterizedTest
+    @EnumSource(FragranceConcentration.class)
+    void successfullyConvertedAllConcentrationsToProtoTest(FragranceConcentration concentration) {
+        Fragrance fragrance = FragranceStub.createFragranceWithConcentration(concentration);
+
+        FragranceData fragranceData = FragranceProtoConverter.toProto(fragrance);
+
+        assertThat(fragranceData.getConcentration().name()).contains(concentration.name());
     }
 
     @DisplayName(value = "Успешно конвертируем все значения FragranceLongevity из entity в proto")

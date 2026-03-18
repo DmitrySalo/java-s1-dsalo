@@ -18,22 +18,22 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public Optional<User> findById(final UserID userID) {
-        if (userID == null) {
-            throw new IllegalArgumentException("ID пользователя обязателен!");
-        }
-
         UserDBModel dbModel = mongoTemplate.findById(userID.getValue(), UserDBModel.class);
-
         return Optional.ofNullable(dbModel).map(UserConverter::toEntity);
     }
 
     @Override
     public void save(final User user) {
-        if (user == null) {
-            throw new IllegalArgumentException("Пользователь обязателен!");
-        }
-
         UserDBModel model = UserConverter.toDbModel(user);
         mongoTemplate.save(model);
+    }
+
+    @Override
+    public void delete(final UserID userID) {
+        UserDBModel dbModel = mongoTemplate.findById(userID.getValue(), UserDBModel.class);
+        Optional.ofNullable(dbModel)
+                .map(mongoTemplate::remove)
+                .orElseThrow(() -> new IllegalStateException("Пользователь c ID {%s} не существует!"
+                        .formatted(userID.getValue())));
     }
 }

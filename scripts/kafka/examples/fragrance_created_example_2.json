@@ -1,0 +1,19 @@
+{
+  "event_id": "01569e29-8c81-4cd8-971c-9997112ac690",
+  "event_type": "FRAGRANCE_EVENT_TYPE_CREATED",
+  "event_timestamp": 1771149922091,
+  "payload": {
+    "id": "2b8898a6-543d-4628-b6b7-5df892f1b3ec",
+    "name": "Fahrenheit Absolute",
+    "resume": "Изысканно!",
+    "concentration": 2,
+    "rating": 8,
+    "type": [2, 15],
+    "gender": 1,
+    "season": [3, 4, 6],
+    "longevity": 4,
+    "sillage": 3,
+    "availability": 1,
+    "created_at": "2026-01-22T11:00:00Z"
+  }
+}

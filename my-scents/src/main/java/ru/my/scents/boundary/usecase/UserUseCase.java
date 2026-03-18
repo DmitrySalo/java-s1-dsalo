@@ -11,4 +11,6 @@ public interface UserUseCase {
     User update(UpdateUserParam params);
 
     User get(String userId);
+
+    void delete(String userId);
 }

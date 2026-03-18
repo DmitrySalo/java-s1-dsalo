@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+package ru.my.scents.event.fragrance;
+
+option java_multiple_files = true;
+option java_package = "ru.my.scents.fragrance.adapter.event.fragrance.proto";
+
+enum FragranceEventType {
+  FRAGRANCE_EVENT_TYPE_UNSPECIFIED = 0;
+  FRAGRANCE_EVENT_TYPE_CREATED = 1;
+  FRAGRANCE_EVENT_TYPE_UPDATED = 2;
+  FRAGRANCE_EVENT_TYPE_DELETED = 3;
+}

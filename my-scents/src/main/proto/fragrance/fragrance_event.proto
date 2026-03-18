@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+package ru.my.scents.event.fragrance;
+
+option java_multiple_files = true;
+option java_package = "ru.my.scents.fragrance.adapter.event.fragrance.proto";
+
+import "google/protobuf/timestamp.proto";
+import "fragrance/fragrance_availability_status.proto";
+import "fragrance/fragrance_gender.proto";
+import "fragrance/fragrance_longevity.proto";
+import "fragrance/fragrance_sillage.proto";
+import "fragrance/fragrance_season.proto";
+import "fragrance/fragrance_type.proto";
+import "fragrance/fragrance_event_payload.proto";
+import "fragrance/fragrance_event_type.proto";
+
+message FragranceEvent {
+  string event_id = 1;
+  FragranceEventType event_type = 2;
+  google.protobuf.Timestamp event_timestamp = 3;
+  FragranceEventPayload payload = 4;
+}

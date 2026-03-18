@@ -20,6 +20,7 @@ import ru.my.scents.boundary.repository.FragranceRepository;
 import ru.my.scents.configuration.BaseIntegrationTest;
 import ru.my.scents.domain.entity.fragrance.Fragrance;
 import ru.my.scents.domain.entity.fragrance.FragranceAvailabilityStatus;
+import ru.my.scents.domain.entity.fragrance.FragranceConcentration;
 import ru.my.scents.domain.entity.fragrance.FragranceGender;
 import ru.my.scents.domain.entity.fragrance.FragranceID;
 import ru.my.scents.domain.entity.fragrance.FragranceLongevity;
@@ -68,6 +69,7 @@ public class FragranceRepositoryTests extends BaseIntegrationTest {
                             () -> assertThat(exist.getId()).isEqualTo(fragranceID),
                             () -> assertThat(exist.getName()).isEqualTo(toCreate.getName()),
                             () -> assertThat(exist.getResume()).isEqualTo(toCreate.getResume()),
+                            () -> assertThat(exist.getConcentration()).isEqualTo(toCreate.getConcentration()),
                             () -> assertThat(exist.getType()).containsAll(toCreate.getType()),
                             () -> assertThat(exist.getGender()).isEqualTo(toCreate.getGender()),
                             () -> assertThat(exist.getSeason()).containsAll(toCreate.getSeason()),
@@ -95,6 +97,7 @@ public class FragranceRepositoryTests extends BaseIntegrationTest {
                 .id(fragranceID)
                 .name(FragranceName.of("Chanel No 5 Eau de Parfum"))
                 .resume(FragranceResume.of("Изысканно!"))
+                .concentration(FragranceConcentration.EAU_DE_PARFUM)
                 .type(Set.of(FragranceType.ALDEHYDE, FragranceType.FLORAL))
                 .gender(FragranceGender.FEMALE)
                 .season(Set.of(FragranceSeason.DAY, FragranceSeason.NIGHT, FragranceSeason.FALL,
@@ -120,6 +123,7 @@ public class FragranceRepositoryTests extends BaseIntegrationTest {
                             () -> assertThat(exist.getId()).isEqualTo(fragranceID),
                             () -> assertThat(exist.getName()).isEqualTo(toUpdate.getName()),
                             () -> assertThat(exist.getResume()).isEqualTo(toUpdate.getResume()),
+                            () -> assertThat(exist.getConcentration()).isEqualTo(toUpdate.getConcentration()),
                             () -> assertThat(exist.getType()).containsAll(toUpdate.getType()),
                             () -> assertThat(exist.getGender()).isEqualTo(toUpdate.getGender()),
                             () -> assertThat(exist.getSeason()).containsAll(toUpdate.getSeason()),

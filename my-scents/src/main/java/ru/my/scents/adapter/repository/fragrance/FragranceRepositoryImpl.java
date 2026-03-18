@@ -18,22 +18,22 @@ public class FragranceRepositoryImpl implements FragranceRepository {
 
     @Override
     public Optional<Fragrance> findById(final FragranceID fragranceID) {
-        if (fragranceID == null) {
-            throw new IllegalArgumentException("ID парфюма обязателен!");
-        }
-
         FragranceDBModel dbModel = mongoTemplate.findById(fragranceID.getValue(), FragranceDBModel.class);
-
         return Optional.ofNullable(dbModel).map(FragranceConverter::toEntity);
     }
 
     @Override
     public void save(final Fragrance fragrance) {
-        if (fragrance == null) {
-            throw new IllegalArgumentException("Парфюм обязателен!");
-        }
-
         FragranceDBModel model = FragranceConverter.toDbModel(fragrance);
         mongoTemplate.save(model);
+    }
+
+    @Override
+    public void delete(final FragranceID fragranceID) {
+        FragranceDBModel dbModel = mongoTemplate.findById(fragranceID.getValue(), FragranceDBModel.class);
+        Optional.ofNullable(dbModel)
+                .map(mongoTemplate::remove)
+                .orElseThrow(() -> new IllegalStateException("Парфюма c ID {%s} не существует!"
+                        .formatted(fragranceID.getValue())));
     }
 }

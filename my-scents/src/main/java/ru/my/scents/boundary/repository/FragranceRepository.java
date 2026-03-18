@@ -9,4 +9,6 @@ public interface FragranceRepository {
     Optional<Fragrance> findById(FragranceID userID);
 
     void save(Fragrance user);
+
+    void delete(FragranceID userID);
 }

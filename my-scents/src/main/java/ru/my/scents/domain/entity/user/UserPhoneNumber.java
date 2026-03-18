@@ -37,6 +37,7 @@ public final class UserPhoneNumber {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
+
         UserPhoneNumber that = (UserPhoneNumber) o;
         return Objects.equals(value, that.value);
     }
@@ -44,6 +45,11 @@ public final class UserPhoneNumber {
     @Override
     public int hashCode() {
         return Objects.hashCode(value);
+    }
+
+    @Override
+    public String toString() {
+        return value;
     }
 
     private static class PhoneNumberValidationException extends RuntimeException {

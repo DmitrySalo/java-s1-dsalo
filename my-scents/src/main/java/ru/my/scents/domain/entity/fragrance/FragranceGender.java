@@ -3,6 +3,9 @@ package ru.my.scents.domain.entity.fragrance;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
+/**
+ * Условная ориентация парфюма.
+ */
 @Getter
 @RequiredArgsConstructor
 public enum FragranceGender {

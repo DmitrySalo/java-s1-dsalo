@@ -1,0 +1,31 @@
+syntax = "proto3";
+
+package ru.my.scents.event.fragrance;
+
+option java_multiple_files = true;
+option java_package = "ru.my.scents.fragrance.adapter.event.fragrance.proto";
+
+import "google/protobuf/timestamp.proto";
+import "fragrance/fragrance_availability_status.proto";
+import "fragrance/fragrance_gender.proto";
+import "fragrance/fragrance_longevity.proto";
+import "fragrance/fragrance_sillage.proto";
+import "fragrance/fragrance_season.proto";
+import "fragrance/fragrance_type.proto";
+import "fragrance/fragrance_concentration.proto";
+
+message FragranceEventPayload {
+  string id = 1;
+  string name = 2;
+  string resume = 3;
+  int32 rating = 4;
+  ru.my.scents.grpc.fragrance.FragranceConcentration concentration = 5;
+  repeated ru.my.scents.grpc.fragrance.FragranceType type = 6;
+  ru.my.scents.grpc.fragrance.FragranceGender gender = 7;
+  repeated ru.my.scents.grpc.fragrance.FragranceSeason season = 8;
+  ru.my.scents.grpc.fragrance.FragranceLongevity longevity = 9;
+  ru.my.scents.grpc.fragrance.FragranceSillage sillage = 10;
+  ru.my.scents.grpc.fragrance.FragranceAvailabilityStatus availability = 11;
+  google.protobuf.Timestamp created_at = 12;
+  google.protobuf.Timestamp updated_at = 13;
+}

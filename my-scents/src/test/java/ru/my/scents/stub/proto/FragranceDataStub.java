@@ -7,6 +7,7 @@ import java.util.Set;
 import java.util.UUID;
 import lombok.experimental.UtilityClass;
 import ru.my.scents.fragrance.adapter.controller.grpc.fragrance.proto.FragranceAvailabilityStatus;
+import ru.my.scents.fragrance.adapter.controller.grpc.fragrance.proto.FragranceConcentration;
 import ru.my.scents.fragrance.adapter.controller.grpc.fragrance.proto.FragranceData;
 import ru.my.scents.fragrance.adapter.controller.grpc.fragrance.proto.FragranceGender;
 import ru.my.scents.fragrance.adapter.controller.grpc.fragrance.proto.FragranceLongevity;
@@ -23,6 +24,7 @@ public class FragranceDataStub {
                 .setRating(6)
                 .setName("Benzin")
                 .setResume("Интересный, дымно-кожаный аромат на весну")
+                .setConcentration(FragranceConcentration.FRAGRANCE_CONCENTRATION_EAU_DE_TOILETTE)
                 .addAllSeason(Set.of(FragranceSeason.FRAGRANCE_SEASON_SPRING, FragranceSeason.FRAGRANCE_SEASON_FALL,
                         FragranceSeason.FRAGRANCE_SEASON_DAY))
                 .setGender(FragranceGender.FRAGRANCE_GENDER_UNISEX)
@@ -41,9 +43,9 @@ public class FragranceDataStub {
                 .setRating(6)
                 .setName("Benzin")
                 .setResume("Интересный, дымно-кожаный аромат на весну")
-                .addSeason(FragranceSeason.FRAGRANCE_SEASON_SPRING)
-                .addSeason(FragranceSeason.FRAGRANCE_SEASON_FALL)
-                .addSeason(FragranceSeason.FRAGRANCE_SEASON_DAY)
+                .setConcentration(FragranceConcentration.FRAGRANCE_CONCENTRATION_EAU_DE_TOILETTE)
+                .addAllSeason(Set.of(FragranceSeason.FRAGRANCE_SEASON_SPRING, FragranceSeason.FRAGRANCE_SEASON_FALL,
+                        FragranceSeason.FRAGRANCE_SEASON_DAY))
                 .setGender(FragranceGender.FRAGRANCE_GENDER_UNISEX)
                 .addType(FragranceType.FRAGRANCE_TYPE_LEATHER)
                 .setSillage(FragranceSillage.FRAGRANCE_SILLAGE_STRONG)
@@ -60,9 +62,9 @@ public class FragranceDataStub {
                 .setRating(6)
                 .setName("Benzin")
                 .setResume("Интересный, дымно-кожаный аромат на весну")
-                .addSeason(FragranceSeason.FRAGRANCE_SEASON_SPRING)
-                .addSeason(FragranceSeason.FRAGRANCE_SEASON_FALL)
-                .addSeason(FragranceSeason.FRAGRANCE_SEASON_DAY)
+                .setConcentration(FragranceConcentration.FRAGRANCE_CONCENTRATION_EAU_DE_TOILETTE)
+                .addAllSeason(Set.of(FragranceSeason.FRAGRANCE_SEASON_SPRING, FragranceSeason.FRAGRANCE_SEASON_FALL,
+                        FragranceSeason.FRAGRANCE_SEASON_DAY))
                 .setGender(FragranceGender.FRAGRANCE_GENDER_UNISEX)
                 .addType(type)
                 .setSillage(FragranceSillage.FRAGRANCE_SILLAGE_STRONG)
@@ -79,6 +81,7 @@ public class FragranceDataStub {
                 .setRating(6)
                 .setName("Gender Test Fragrance")
                 .setResume("Тестовый аромат")
+                .setConcentration(FragranceConcentration.FRAGRANCE_CONCENTRATION_EAU_DE_TOILETTE)
                 .addSeason(FragranceSeason.FRAGRANCE_SEASON_SPRING)
                 .setGender(gender)
                 .addType(FragranceType.FRAGRANCE_TYPE_FLORAL)
@@ -95,6 +98,7 @@ public class FragranceDataStub {
                 .setRating(6)
                 .setName("Seasons Test Fragrance")
                 .setResume("Тестовый аромат")
+                .setConcentration(FragranceConcentration.FRAGRANCE_CONCENTRATION_EAU_DE_TOILETTE)
                 .addAllSeason(seasons)
                 .setGender(FragranceGender.FRAGRANCE_GENDER_UNISEX)
                 .addType(FragranceType.FRAGRANCE_TYPE_WOODY)
@@ -110,6 +114,7 @@ public class FragranceDataStub {
                 .setId(UUID.randomUUID().toString())
                 .setRating(7)
                 .setName("Longevity Test Fragrance")
+                .setConcentration(FragranceConcentration.FRAGRANCE_CONCENTRATION_EAU_DE_TOILETTE)
                 .setResume("Тестовый аромат")
                 .addSeason(FragranceSeason.FRAGRANCE_SEASON_WINTER)
                 .setGender(FragranceGender.FRAGRANCE_GENDER_MALE)
@@ -126,6 +131,7 @@ public class FragranceDataStub {
                 .setId(UUID.randomUUID().toString())
                 .setRating(7)
                 .setName("Sillage Test Fragrance")
+                .setConcentration(FragranceConcentration.FRAGRANCE_CONCENTRATION_EAU_DE_TOILETTE)
                 .setResume("Тестовый аромат")
                 .addSeason(FragranceSeason.FRAGRANCE_SEASON_SUMMER)
                 .setGender(FragranceGender.FRAGRANCE_GENDER_FEMALE)
@@ -142,6 +148,7 @@ public class FragranceDataStub {
                 .setId(UUID.randomUUID().toString())
                 .setRating(5)
                 .setName("Availability Test Fragrance")
+                .setConcentration(FragranceConcentration.FRAGRANCE_CONCENTRATION_EAU_DE_TOILETTE)
                 .setResume("Тестовый аромат")
                 .addSeason(FragranceSeason.FRAGRANCE_SEASON_DAY)
                 .setGender(FragranceGender.FRAGRANCE_GENDER_UNISEX)
@@ -153,12 +160,30 @@ public class FragranceDataStub {
                 .build();
     }
 
+    public static FragranceData createFragranceWithConcentration(FragranceConcentration concentration) {
+        return FragranceData.newBuilder()
+                .setId(UUID.randomUUID().toString())
+                .setRating(5)
+                .setName("Availability Test Fragrance")
+                .setConcentration(concentration)
+                .setResume("Тестовый аромат")
+                .addSeason(FragranceSeason.FRAGRANCE_SEASON_DAY)
+                .setGender(FragranceGender.FRAGRANCE_GENDER_UNISEX)
+                .addType(FragranceType.FRAGRANCE_TYPE_CITRUS)
+                .setSillage(FragranceSillage.FRAGRANCE_SILLAGE_INTIMATE)
+                .setLongevity(FragranceLongevity.FRAGRANCE_LONGEVITY_WEAK)
+                .setAvailability(FragranceAvailabilityStatus.FRAGRANCE_AVAILABILITY_STATUS_AVAILABLE)
+                .setCreatedAt(toProtoTimestamp(Instant.ofEpochSecond(System.currentTimeMillis() / 1000)))
+                .build();
+    }
+
     public static FragranceData createFragranceWithDefaultTimestamps() {
         return FragranceData.newBuilder()
                 .setId(UUID.randomUUID().toString())
                 .setRating(6)
                 .setName("Default Timestamps Fragrance")
                 .setResume("Тестовый аромат без дат")
+                .setConcentration(FragranceConcentration.FRAGRANCE_CONCENTRATION_EAU_DE_TOILETTE)
                 .addSeason(FragranceSeason.FRAGRANCE_SEASON_SPRING)
                 .setGender(FragranceGender.FRAGRANCE_GENDER_MALE)
                 .addType(FragranceType.FRAGRANCE_TYPE_WOODY)

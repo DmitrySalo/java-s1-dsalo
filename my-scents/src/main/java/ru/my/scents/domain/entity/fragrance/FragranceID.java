@@ -39,6 +39,7 @@ public class FragranceID {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
+
         FragranceID userID = (FragranceID) o;
         return Objects.equals(value, userID.value);
     }
@@ -46,6 +47,11 @@ public class FragranceID {
     @Override
     public int hashCode() {
         return Objects.hashCode(value);
+    }
+
+    @Override
+    public String toString() {
+        return value;
     }
 
     private static class FragranceIDValidationException extends RuntimeException {

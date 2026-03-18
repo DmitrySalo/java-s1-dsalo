@@ -31,6 +31,7 @@ public class FragranceRating {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
+
         FragranceRating rating = (FragranceRating) o;
         return Objects.equals(value, rating.value);
     }
@@ -38,6 +39,11 @@ public class FragranceRating {
     @Override
     public int hashCode() {
         return Objects.hashCode(value);
+    }
+
+    @Override
+    public String toString() {
+        return String.valueOf(value);
     }
 
     private static class FragranceRatingValidationException extends RuntimeException {

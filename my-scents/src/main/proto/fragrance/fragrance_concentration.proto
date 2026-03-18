@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package ru.my.scents.grpc.fragrance;
+
+option java_multiple_files = true;
+option java_package = "ru.my.scents.fragrance.adapter.controller.grpc.fragrance.proto";
+
+enum FragranceConcentration {
+  FRAGRANCE_CONCENTRATION_UNSPECIFIED = 0;
+  FRAGRANCE_CONCENTRATION_EAU_DE_COLOGNE = 1;
+  FRAGRANCE_CONCENTRATION_EAU_DE_TOILETTE = 2;
+  FRAGRANCE_CONCENTRATION_EAU_DE_PARFUM = 3;
+  FRAGRANCE_CONCENTRATION_PARFUM = 4;
+  FRAGRANCE_CONCENTRATION_EXTRACT_DE_PARFUM = 5;
+}
