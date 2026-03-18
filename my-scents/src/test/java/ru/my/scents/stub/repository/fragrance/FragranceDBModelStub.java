@@ -6,6 +6,7 @@ import java.util.UUID;
 import lombok.experimental.UtilityClass;
 import ru.my.scents.adapter.repository.fragrance.model.FragranceDBModel;
 import ru.my.scents.domain.entity.fragrance.FragranceAvailabilityStatus;
+import ru.my.scents.domain.entity.fragrance.FragranceConcentration;
 import ru.my.scents.domain.entity.fragrance.FragranceGender;
 import ru.my.scents.domain.entity.fragrance.FragranceLongevity;
 import ru.my.scents.domain.entity.fragrance.FragranceSeason;
@@ -20,6 +21,7 @@ public class FragranceDBModelStub {
                 .id(UUID.randomUUID().toString())
                 .name("Fahrenheit Absolute")
                 .resume("Изысканно!")
+                .concentration(FragranceConcentration.EAU_DE_TOILETTE.name())
                 .type(Set.of(FragranceType.MUSKY.name(), FragranceType.FLORAL.name()))
                 .gender(FragranceGender.MALE.name())
                 .season(Set.of(FragranceSeason.NIGHT.name(), FragranceSeason.FALL.name(),

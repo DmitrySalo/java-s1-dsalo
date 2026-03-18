@@ -12,11 +12,16 @@ import ru.my.scents.domain.entity.fragrance.Fragrance;
 public class ResponseFragranceConverter {
 
     public static CreateFragranceResponse createResultToResponse(Fragrance result) {
+        if (result == null) {
+            throw new IllegalArgumentException("Парфюм обязателен!");
+        }
+
         return CreateFragranceResponse.builder()
                 .id(result.getId().getValue().toString())
                 .name(result.getName().getValue())
                 .rating(result.getRating().getValue())
                 .resume(result.getResume().getValue())
+                .concentration(result.getConcentration().name())
                 .type(toStringSet(result.getType()))
                 .gender(result.getGender().name())
                 .season(toStringSet(result.getSeason()))
@@ -27,11 +32,16 @@ public class ResponseFragranceConverter {
     }
 
     public static UpdateFragranceResponse updateResultToResponse(Fragrance result) {
+        if (result == null) {
+            throw new IllegalArgumentException("Парфюм обязателен!");
+        }
+
         return UpdateFragranceResponse.builder()
                 .id(result.getId().getValue().toString())
                 .name(result.getName().getValue())
                 .rating(result.getRating().getValue())
                 .resume(result.getResume().getValue())
+                .concentration(result.getConcentration().name())
                 .type(toStringSet(result.getType()))
                 .gender(result.getGender().name())
                 .season(toStringSet(result.getSeason()))
@@ -42,11 +52,16 @@ public class ResponseFragranceConverter {
     }
 
     public static GetFragranceResponse getResultToResponse(Fragrance result) {
+        if (result == null) {
+            throw new IllegalArgumentException("Парфюм обязателен!");
+        }
+
         return GetFragranceResponse.builder()
                 .id(result.getId().getValue().toString())
                 .name(result.getName().getValue())
                 .rating(result.getRating().getValue())
                 .resume(result.getResume().getValue())
+                .concentration(result.getConcentration().name())
                 .type(toStringSet(result.getType()))
                 .gender(result.getGender().name())
                 .season(toStringSet(result.getSeason()))

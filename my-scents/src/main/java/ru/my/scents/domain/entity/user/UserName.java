@@ -37,6 +37,7 @@ public final class UserName {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
+
         UserName userName = (UserName) o;
         return Objects.equals(value, userName.value);
     }
@@ -44,6 +45,11 @@ public final class UserName {
     @Override
     public int hashCode() {
         return Objects.hashCode(value);
+    }
+
+    @Override
+    public String toString() {
+        return value;
     }
 
     private static class UserNameValidationException extends RuntimeException {

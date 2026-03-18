@@ -31,6 +31,9 @@ public class FragranceDBModel {
     @Field(name = "resume")
     private String resume;
 
+    @Field(name = "concentration")
+    private String concentration;
+
     @Indexed(name = "type_idx")
     @Field(name = "type")
     private Set<String> type;

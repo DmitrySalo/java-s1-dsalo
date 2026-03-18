@@ -12,6 +12,7 @@
         "id": "fc044a50-339e-4683-977a-495cbe6f2cfe",
         "name": "Fahrenheit",
         "resume": "Прекрасно!",
+        "concentration": 2,
         "rating": 8,
         "type": [4],
         "gender": 1,

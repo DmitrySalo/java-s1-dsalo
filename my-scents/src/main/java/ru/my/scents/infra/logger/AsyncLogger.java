@@ -1,13 +1,14 @@
 package ru.my.scents.infra.logger;
 
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.function.Consumer;
+import java.util.function.Supplier;
 import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.SmartLifecycle;
@@ -37,9 +38,12 @@ public class AsyncLogger implements Logger, SmartLifecycle {
     private void processMessages() {
         while (running.get()) {
             try {
-                var message = logQueue.take();
-                handleLogMessage(message);
+                var message = logQueue.poll(100, TimeUnit.MILLISECONDS);
+                if (message == null) {
+                    continue;
+                }
 
+                handleLogMessage(message);
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
                 break;
@@ -71,155 +75,84 @@ public class AsyncLogger implements Logger, SmartLifecycle {
             MDC.setContextMap(message.getMdcContext());
         }
 
-        for (var logger : loggers) {
-            switch (message.messageType) {
-                case INFO:
-                    if (message.args != null && message.args.length > 0) {
-                        logger.info(message.message, message.args);
-                    } else {
-                        logger.info(message.message);
-                    }
-                    break;
-                case ERROR:
-                    if (message.args != null && message.args.length > 0) {
-                        logger.error(message.message, message.throwable, message.args);
-                    } else {
-                        logger.error(message.message, message.throwable);
-                    }
-                    break;
-                case DEBUG:
-                    if (message.args != null && message.args.length > 0) {
-                        logger.debug(message.message, message.args);
-                    }
-                    break;
-                case WARN:
-                    if (message.args != null && message.args.length > 0) {
-                        logger.warn(message.message, message.args);
-                    }
-                    break;
-                default:
-                    break;
-            }
-        }
+        loggers.forEach(message::print);
     }
 
     @Override
     public void error(String message, Throwable throwable) {
-        if (!running.get()) {
-            loggers.forEach(logger -> logger.error(message, throwable));
-            return;
-        }
-
-        try {
-            logQueue.put(new LogMessage(LogMessage.MessageType.ERROR, message, null, throwable));
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-            loggers.forEach(logger -> logger.error(message, throwable));
-        }
+        executeLogAction(
+                logger -> logger.error(message, throwable),
+                () -> LogMessage.error(message, throwable)
+        );
     }
 
     @Override
     public void error(String message) {
-        if (!running.get()) {
-            loggers.forEach(logger -> logger.error(message));
-            return;
-        }
-
-        try {
-            logQueue.put(new LogMessage(LogMessage.MessageType.ERROR, message, null, null));
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-            loggers.forEach(logger -> logger.error(message));
-        }
+        executeLogAction(
+                logger -> logger.error(message),
+                () -> LogMessage.error(message)
+        );
     }
 
     @Override
     public void info(String message) {
-        if (!running.get()) {
-            loggers.forEach(logger -> logger.info(message));
-            return;
-        }
-
-        try {
-            logQueue.put(new LogMessage(LogMessage.MessageType.INFO, message, null, null));
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-            loggers.forEach(logger -> logger.info(message));
-        }
+        executeLogAction(
+                logger -> logger.info(message),
+                () -> LogMessage.info(message)
+        );
     }
 
     @Override
     public void error(String message, Throwable throwable, Object... args) {
-        if (!running.get()) {
-            loggers.forEach(logger -> logger.error(message, throwable, args));
-            return;
-        }
-
-        try {
-            logQueue.put(new LogMessage(LogMessage.MessageType.ERROR, message, args, throwable));
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-            loggers.forEach(logger -> logger.error(message, throwable, args));
-        }
+        executeLogAction(
+                logger -> logger.error(message, throwable, args),
+                () -> LogMessage.error(message, throwable, args)
+        );
     }
 
     @Override
     public void error(String message, Object... args) {
-        if (!running.get()) {
-            loggers.forEach(logger -> logger.error(message, args));
-            return;
-        }
-
-        try {
-            logQueue.put(new LogMessage(LogMessage.MessageType.ERROR, message, args, null));
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-            loggers.forEach(logger -> logger.error(message, args));
-        }
+        executeLogAction(
+                logger -> logger.error(message, args),
+                () -> LogMessage.error(message, args)
+        );
     }
 
     @Override
     public void info(String message, Object... args) {
-        if (!running.get()) {
-            loggers.forEach(logger -> logger.info(message, args));
-            return;
-        }
-
-        try {
-            logQueue.put(new LogMessage(LogMessage.MessageType.INFO, message, args, null));
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-            loggers.forEach(logger -> logger.info(message, args));
-        }
+        executeLogAction(
+                logger -> logger.info(message, args),
+                () -> LogMessage.info(message, args)
+        );
     }
 
     @Override
     public void debug(String message, Object... args) {
-        if (!running.get()) {
-            loggers.forEach(logger -> logger.debug(message, args));
-            return;
-        }
-
-        try {
-            logQueue.put(new LogMessage(LogMessage.MessageType.DEBUG, message, args, null));
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-            loggers.forEach(logger -> logger.debug(message, args));
-        }
+        executeLogAction(
+                logger -> logger.debug(message, args),
+                () -> LogMessage.debug(message, args)
+        );
     }
 
     @Override
     public void warn(String message, Object... args) {
+        executeLogAction(
+                logger -> logger.warn(message, args),
+                () -> LogMessage.warn(message, args)
+        );
+    }
+
+    private void executeLogAction(Consumer<Logger> loggerConsumer, Supplier<LogMessage> logMessageSupplier) {
         if (!running.get()) {
-            loggers.forEach(logger -> logger.warn(message, args));
+            loggers.forEach(loggerConsumer);
             return;
         }
 
         try {
-            logQueue.put(new LogMessage(LogMessage.MessageType.WARN, message, args, null));
+            logQueue.put(logMessageSupplier.get());
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
-            loggers.forEach(logger -> logger.warn(message, args));
+            loggers.forEach(loggerConsumer);
         }
     }
 
@@ -247,34 +180,5 @@ public class AsyncLogger implements Logger, SmartLifecycle {
     @Override
     public boolean isRunning() {
         return running.get();
-    }
-
-    private static class LogMessage {
-
-        private final MessageType messageType;
-        private final String message;
-        private final Throwable throwable;
-        private final Object[] args;
-        private final Map<String, String> mdcContext;
-
-        private LogMessage(MessageType messageType, String message, Object[] args, Throwable throwable) {
-            this.messageType = messageType;
-            this.message = message;
-            this.throwable = throwable;
-            this.args = args;
-            this.mdcContext = MDC.getCopyOfContextMap();
-        }
-
-        Map<String, String> getMdcContext() {
-            return mdcContext;
-        }
-
-        private enum MessageType {
-
-            INFO,
-            ERROR,
-            DEBUG,
-            WARN
-        }
     }
 }

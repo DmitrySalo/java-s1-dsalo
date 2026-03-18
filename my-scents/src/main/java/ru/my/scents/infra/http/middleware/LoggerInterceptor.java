@@ -18,8 +18,14 @@ public class LoggerInterceptor implements HandlerInterceptor {
 
     private static final String REQUEST_START_TIME = "requestStartTime";
     private static final String REQUEST_ID = "requestId";
-    private static final Set<String> IMPORTANT_HEADERS = Set.of("Content-Type", "Content-Length", "Authorization",
-            "Accept", "Accept-Language", "X-Forwarded-For");
+    private static final Set<String> IMPORTANT_HEADERS = Set.of(
+            "Content-Type",
+            "Content-Length",
+            "Authorization",
+            "Accept",
+            "Accept-Language",
+            "X-Forwarded-For"
+    );
 
     @Override
     public boolean preHandle(@NonNull HttpServletRequest request,
@@ -59,11 +65,10 @@ public class LoggerInterceptor implements HandlerInterceptor {
     }
 
     @Override
-    public void afterCompletion(
-            @NonNull HttpServletRequest request,
-            @NonNull HttpServletResponse response,
-            @NonNull Object handler,
-            @Nullable Exception ex) {
+    public void afterCompletion(@NonNull HttpServletRequest request,
+                                @NonNull HttpServletResponse response,
+                                @NonNull Object handler,
+                                @Nullable Exception ex) {
 
         String requestId = (String) request.getAttribute(REQUEST_ID);
         Long startTime = (Long) request.getAttribute(REQUEST_START_TIME);
@@ -107,6 +112,7 @@ public class LoggerInterceptor implements HandlerInterceptor {
         if (value == null || value.length() <= 10) {
             return "***";
         }
+
         return value.substring(0, 6) + "***" + value.substring(value.length() - 4);
     }
 }

@@ -7,6 +7,7 @@ import com.mongodb.client.MongoClients;
 import io.micrometer.core.instrument.MeterRegistry;
 import io.micrometer.core.instrument.binder.mongodb.MongoMetricsCommandListener;
 import io.micrometer.core.instrument.binder.mongodb.MongoMetricsConnectionPoolListener;
+import java.util.Objects;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -45,11 +46,14 @@ public class MongoDBConfig {
     }
 
     @Bean
-    MongoTemplate mongoTemplate(MongoClient mongoClient, MongoMappingContext mongoMappingContext,
-                                ConnectionString connectionString) {
+    MongoTemplate mongoTemplate(
+            MongoClient mongoClient,
+            MongoMappingContext mongoMappingContext,
+            ConnectionString connectionString
+    ) {
         SimpleMongoClientDatabaseFactory factory = new SimpleMongoClientDatabaseFactory(
                 mongoClient,
-                connectionString.getDatabase());
+                Objects.requireNonNull(connectionString.getDatabase()));
 
         MappingMongoConverter converter = new MappingMongoConverter(
                 new DefaultDbRefResolver(factory),

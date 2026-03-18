@@ -1,0 +1,19 @@
+{
+  "event_id": "8a420205-2b70-4037-8a43-1eb3ea0c2293",
+  "event_type": "FRAGRANCE_EVENT_TYPE_CREATED",
+  "event_timestamp": 1771149922091,
+  "payload": {
+    "id": "fc044a50-339e-4683-977a-495cbe6f2cfe",
+    "name": "Fahrenheit",
+    "resume": "Прекрасно!",
+    "concentration": 2,
+    "rating": 8,
+    "type": [4],
+    "gender": 1,
+    "season": [1, 2, 3, 4, 5, 6],
+    "longevity": 4,
+    "sillage": 3,
+    "availability": 1,
+    "created_at": "2026-01-22T11:00:00Z"
+  }
+}

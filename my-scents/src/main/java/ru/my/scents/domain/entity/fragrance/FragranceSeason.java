@@ -4,7 +4,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 /**
- * Наиболее подходящее время.
+ * Наиболее подходящее время использования парфюма.
  */
 @Getter
 @RequiredArgsConstructor

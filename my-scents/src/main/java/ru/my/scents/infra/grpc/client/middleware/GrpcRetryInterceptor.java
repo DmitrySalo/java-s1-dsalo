@@ -21,12 +21,12 @@ import ru.my.scents.infra.logger.Logger;
 @RequiredArgsConstructor
 public class GrpcRetryInterceptor implements ClientInterceptor {
 
+    private final Logger logger;
     private final int maxAttempts;
     private final Duration initialBackoff;
     private final Duration maxBackoff;
     private final double multiplier;
     private final Duration perAttemptTimeout;
-    private final Logger logger;
     private final ScheduledExecutorService scheduler;
 
     @Override
@@ -177,7 +177,8 @@ public class GrpcRetryInterceptor implements ClientInterceptor {
 
         private boolean shouldRetry(Status status, int attempt) {
             if (attempt >= maxAttempts) {
-                logger.info("Достигнуто максимальное количество попыток {} для {}", maxAttempts, method.getFullMethodName());
+                logger.info("Достигнуто максимальное количество попыток {} для {}",
+                        maxAttempts, method.getFullMethodName());
                 return false;
             }
 
@@ -201,26 +202,35 @@ public class GrpcRetryInterceptor implements ClientInterceptor {
             logger.info("Повторная попытка {}/{} вызова {} после {}ms (код: {})",
                     attemptNumber + 1, maxAttempts, method.getFullMethodName(), backoffMs, status.getCode());
 
-            scheduledRetry = scheduler.schedule(() -> savedContext.run(() -> {
-                try {
-                    var retryCall = new RetryingClientCall<>(
-                            channel, method, baseCallOptions, attemptNumber + 1,
-                            savedContext, overallDeadline);
+            Runnable retryTask = () -> savedContext.run(() -> retryCall(status, trailers));
 
-                    retryCall.start(responseListener, bufferedHeaders);
-                    retryCall.request(1);
+            scheduledRetry = scheduler.schedule(
+                    () -> retryTask,
+                    backoffMs,
+                    TimeUnit.MILLISECONDS
+            );
+        }
 
-                    if (bufferedMessage != null) {
-                        retryCall.sendMessage(bufferedMessage);
-                    }
+        private void retryCall(Status status, Metadata trailers) {
+            try {
+                var retryCall = new RetryingClientCall<>(
+                        channel, method, baseCallOptions, attemptNumber + 1,
+                        savedContext, overallDeadline);
 
-                    retryCall.halfClose();
-                } catch (Exception e) {
-                    logger.error("Ошибка при попытке повторного вызова {}: {}",
-                            e, method.getFullMethodName(), e.getMessage());
-                    responseListener.onClose(status, trailers);
+                retryCall.start(responseListener, bufferedHeaders);
+                retryCall.request(1);
+
+                if (bufferedMessage != null) {
+                    retryCall.sendMessage(bufferedMessage);
                 }
-            }), backoffMs, TimeUnit.MILLISECONDS);
+
+                retryCall.halfClose();
+            } catch (Exception e) {
+                logger.error("Ошибка при попытке повторного вызова {}: {}",
+                        e, method.getFullMethodName(), e.getMessage());
+
+                responseListener.onClose(status, trailers);
+            }
         }
 
         private boolean isRetriable(Status status) {

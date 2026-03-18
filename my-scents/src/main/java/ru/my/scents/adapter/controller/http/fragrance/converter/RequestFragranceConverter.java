@@ -12,11 +12,16 @@ import ru.my.scents.boundary.model.fragrance.UpdateFragranceParam;
 public class RequestFragranceConverter {
 
     public static CreateFragranceParam createRequestToModel(CreateFragranceRequest request) {
+        if (request == null) {
+            throw new IllegalArgumentException("Тело запроса обязательно!");
+        }
+
         return CreateFragranceParam.builder()
                 .id(UUID.randomUUID().toString())
                 .name(request.name())
                 .rating(request.rating())
                 .resume(request.resume())
+                .concentration(request.concentration())
                 .type(request.type())
                 .gender(request.gender())
                 .season(request.season())
@@ -28,11 +33,16 @@ public class RequestFragranceConverter {
     }
 
     public static UpdateFragranceParam updateRequestToModel(UpdateFragranceRequest request) {
+        if (request == null) {
+            throw new IllegalArgumentException("Тело запроса обязательно!");
+        }
+
         return UpdateFragranceParam.builder()
                 .id(request.id())
                 .name(request.name())
                 .rating(request.rating())
                 .resume(request.resume())
+                .concentration(request.concentration())
                 .type(request.type())
                 .gender(request.gender())
                 .season(request.season())

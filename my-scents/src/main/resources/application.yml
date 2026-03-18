@@ -1,5 +1,5 @@
 server:
-  port: 8081
+  port: 8087
   jetty:
     connection-idle-timeout: 60000
     max-connections: 200
@@ -7,10 +7,11 @@ server:
       min: 8
       max: 200
       idle-timeout: 60000
+  shutdown: graceful
 
 management:
   server:
-    port: 8080
+    port: 8086
   endpoints:
     web:
       base-path: /
@@ -48,10 +49,58 @@ spring:
   autoconfigure:
     exclude:
       - org.springframework.boot.grpc.server.autoconfigure.GrpcServerAutoConfiguration
+  kafka:
+    bootstrap-servers: localhost:9092
+    producer:
+      acks: all
+      retries: 3
+      batch-size: 16384
+      buffer-memory: 33554432
+    consumer:
+      group-id: ${spring.application.name}
+      auto-offset-reset: earliest
+      enable-auto-commit: false
+      max-poll-records: 100
+
+kafka:
+  retry:
+    attempts: 4
+    initial-interval-ms: 10000
+    max-interval-ms: 60000
+    multiplier: 2.0
+  topics:
+    my-scents-fragrance:
+      name: my-scents-fragrance-events
+      concurrency: 1
+      auto-create-topics: true
+      replication-factor: 1
+      num-partitions: 1
+    my-scents-fragrance-dlt:
+      name: my-scents-fragrance-events-dlt
+      concurrency: 1
+      auto-create-topics: true
+      replication-factor: 1
+      num-partitions: 1
+    outer-fragrance:
+      name: outer-fragrance-events
+      concurrency: 1
+      auto-create-topics: true
+      replication-factor: 1
+      num-partitions: 1
+    outer-fragrance-dlt:
+      name: outer-fragrance-events-dlt
+      concurrency: 1
+      auto-create-topics: true
+      replication-factor: 1
+      num-partitions: 1
 
 logging:
   queue:
     capacity: 100
+  level:
+    org.springframework.kafka: INFO
+    org.apache.kafka: INFO
+    ru.my.scents: DEBUG
 
 grpc:
   server:

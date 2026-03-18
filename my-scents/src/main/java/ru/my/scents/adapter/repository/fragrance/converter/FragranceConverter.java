@@ -6,6 +6,7 @@ import lombok.experimental.UtilityClass;
 import ru.my.scents.adapter.repository.fragrance.model.FragranceDBModel;
 import ru.my.scents.domain.entity.fragrance.Fragrance;
 import ru.my.scents.domain.entity.fragrance.FragranceAvailabilityStatus;
+import ru.my.scents.domain.entity.fragrance.FragranceConcentration;
 import ru.my.scents.domain.entity.fragrance.FragranceGender;
 import ru.my.scents.domain.entity.fragrance.FragranceID;
 import ru.my.scents.domain.entity.fragrance.FragranceLongevity;
@@ -23,11 +24,13 @@ public class FragranceConverter {
         if (fragrance == null) {
             throw new IllegalArgumentException("Парфюм обязателен!");
         }
+
         return FragranceDBModel.builder()
                 .id(fragrance.getId().getValue().toString())
                 .name(fragrance.getName().getValue())
                 .rating(fragrance.getRating().getValue())
                 .resume(fragrance.getResume().getValue())
+                .concentration(fragrance.getConcentration().name())
                 .type(toStringSet(fragrance.getType()))
                 .season(toStringSet(fragrance.getSeason()))
                 .sillage(fragrance.getSillage().name())
@@ -43,11 +46,13 @@ public class FragranceConverter {
         if (dbModel == null) {
             throw new IllegalArgumentException("Парфюм обязателен!");
         }
+
         return Fragrance.builder()
                 .id(FragranceID.of(dbModel.getId()))
                 .name(FragranceName.of(dbModel.getName()))
                 .rating(FragranceRating.of(dbModel.getRating()))
                 .resume(FragranceResume.of(dbModel.getResume()))
+                .concentration(FragranceConcentration.valueOf(dbModel.getConcentration()))
                 .type(toEnumSet(dbModel.getType(), FragranceType.class))
                 .season(toEnumSet(dbModel.getSeason(), FragranceSeason.class))
                 .sillage(FragranceSillage.valueOf(dbModel.getSillage()))

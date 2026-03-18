@@ -11,4 +11,6 @@ public interface FragranceUseCase {
     Fragrance update(UpdateFragranceParam params);
 
     Fragrance get(String fragranceId);
+
+    void delete(String fragranceId);
 }

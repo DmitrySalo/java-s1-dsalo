@@ -1,8 +1,10 @@
 package ru.my.scents.adapter.controller.http.user;
 
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -19,8 +21,8 @@ import ru.my.scents.adapter.controller.http.user.response.GetUserResponse;
 import ru.my.scents.adapter.controller.http.user.response.UpdateUserResponse;
 import ru.my.scents.boundary.model.user.CreateUserParam;
 import ru.my.scents.boundary.model.user.UpdateUserParam;
-import ru.my.scents.domain.entity.user.User;
 import ru.my.scents.boundary.usecase.UserUseCase;
+import ru.my.scents.domain.entity.user.User;
 
 @RestController
 @RequestMapping("/api/v1/users")
@@ -44,9 +46,15 @@ public class UserController {
     }
 
     @GetMapping
-    public ResponseEntity<GetUserResponse> getUser(@RequestParam String userId) {
+    public ResponseEntity<GetUserResponse> getUser(@NotBlank @RequestParam String userId) {
         User result = userUseCase.get(userId);
         return ResponseEntity.ok(ResponseUserConverter.getResultToResponse(result));
+    }
+
+    @DeleteMapping
+    public ResponseEntity<Void> deleteUser(@NotBlank @RequestParam String userId) {
+        userUseCase.delete(userId);
+        return ResponseEntity.ok().build();
     }
 }
 

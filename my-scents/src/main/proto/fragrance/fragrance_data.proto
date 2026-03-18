@@ -12,18 +12,20 @@ import "fragrance/fragrance_longevity.proto";
 import "fragrance/fragrance_sillage.proto";
 import "fragrance/fragrance_season.proto";
 import "fragrance/fragrance_type.proto";
+import "fragrance/fragrance_concentration.proto";
 
 message FragranceData {
   string id = 1;
   string name = 2;
   string resume = 3;
   int32 rating = 4;
-  repeated FragranceType type = 5;
-  FragranceGender gender = 6;
-  repeated FragranceSeason season = 7;
-  FragranceLongevity longevity = 8;
-  FragranceSillage sillage = 9;
-  FragranceAvailabilityStatus availability = 10;
-  google.protobuf.Timestamp created_at = 11;
-  google.protobuf.Timestamp updated_at = 12;
+  FragranceConcentration concentration = 5;
+  repeated FragranceType type = 6;
+  FragranceGender gender = 7;
+  repeated FragranceSeason season = 8;
+  FragranceLongevity longevity = 9;
+  FragranceSillage sillage = 10;
+  FragranceAvailabilityStatus availability = 11;
+  google.protobuf.Timestamp created_at = 12;
+  google.protobuf.Timestamp updated_at = 13;
 }

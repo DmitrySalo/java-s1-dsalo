@@ -15,6 +15,7 @@ public class UserConverter {
         if (user == null) {
             throw new IllegalArgumentException("Пользователь обязателен!");
         }
+
         return UserDBModel.builder()
                 .id(user.getId().getValue().toString())
                 .firstName(user.getFirstName().getValue())
@@ -30,6 +31,7 @@ public class UserConverter {
         if (dbModel == null) {
             throw new IllegalArgumentException("Пользователь обязателен!");
         }
+
         return User.builder()
                 .id(UserID.of(dbModel.getId()))
                 .firstName(UserName.of(dbModel.getFirstName()))

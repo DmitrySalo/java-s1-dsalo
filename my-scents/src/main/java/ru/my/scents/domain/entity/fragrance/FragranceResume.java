@@ -26,6 +26,7 @@ public final class FragranceResume {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
+
         FragranceResume resume = (FragranceResume) o;
         return Objects.equals(value, resume.value);
     }
@@ -33,6 +34,11 @@ public final class FragranceResume {
     @Override
     public int hashCode() {
         return Objects.hashCode(value);
+    }
+
+    @Override
+    public String toString() {
+        return value;
     }
 
     private static class FragranceResumeValidationException extends RuntimeException {

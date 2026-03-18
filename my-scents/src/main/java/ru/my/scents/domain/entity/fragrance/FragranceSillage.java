@@ -4,7 +4,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 /**
- * Шлейф парфюма.
+ * Сила шлейфа парфюма.
  */
 @Getter
 @RequiredArgsConstructor

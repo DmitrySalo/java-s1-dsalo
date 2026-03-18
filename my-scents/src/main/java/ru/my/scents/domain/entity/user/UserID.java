@@ -39,6 +39,7 @@ public class UserID {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
+
         UserID userID = (UserID) o;
         return Objects.equals(value, userID.value);
     }
@@ -46,6 +47,11 @@ public class UserID {
     @Override
     public int hashCode() {
         return Objects.hashCode(value);
+    }
+
+    @Override
+    public String toString() {
+        return value;
     }
 
     private static class UserIDValidationException extends RuntimeException {

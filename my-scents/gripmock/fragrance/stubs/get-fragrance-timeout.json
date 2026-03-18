@@ -13,6 +13,7 @@
         "id": "5689ad72-5bfd-448e-8eb4-b67b95ff4dc9",
         "name": "Fahrenheit Absolute",
         "resume": "Очень медитативный аромат",
+        "concentration": 2,
         "rating": 8,
         "type": [2, 15],
         "gender": 1,

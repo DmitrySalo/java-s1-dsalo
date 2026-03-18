@@ -12,6 +12,10 @@ import ru.my.scents.boundary.model.user.UpdateUserParam;
 public class RequestUserConverter {
 
     public static CreateUserParam createRequestToModel(CreateUserRequest request) {
+        if (request == null) {
+            throw new IllegalArgumentException("Тело запроса обязательно!");
+        }
+
         return CreateUserParam.builder()
                 .id(UUID.randomUUID().toString())
                 .firstName(request.firstName())
@@ -23,6 +27,10 @@ public class RequestUserConverter {
     }
 
     public static UpdateUserParam updateRequestToModel(UpdateUserRequest request) {
+        if (request == null) {
+            throw new IllegalArgumentException("Тело запроса обязательно!");
+        }
+
         return UpdateUserParam.builder()
                 .id(request.id())
                 .firstName(request.firstName())

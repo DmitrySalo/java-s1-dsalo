@@ -7,6 +7,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.atomic.AtomicInteger;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -26,32 +27,34 @@ public class FragranceGrpcConfig {
     }
 
     @Bean(destroyMethod = "shutdown", name = "fragranceServiceRetryScheduler")
-    ScheduledExecutorService fragranceServiceRetryScheduler(@Qualifier("fragranceServiceProperties") GrpcProperties props) {
-
-        ThreadFactory tf = new ThreadFactory() {
+    ScheduledExecutorService fragranceServiceRetryScheduler(
+            @Qualifier("fragranceServiceProperties") GrpcProperties props
+    ) {
+        ThreadFactory threadFactory = new ThreadFactory() {
             private final AtomicInteger idx = new AtomicInteger();
 
             @Override
-            public Thread newThread(Runnable r) {
-                return new Thread(r, "fragrance-grpc-retry-" + idx.getAndIncrement());
+            public Thread newThread(@NotNull Runnable runnable) {
+                return new Thread(runnable, "fragrance-grpc-retry-" + idx.getAndIncrement());
             }
         };
 
-        return Executors.newScheduledThreadPool(props.getRetry().getThreadPoolSize(), tf);
+        return Executors.newScheduledThreadPool(props.getRetry().getThreadPoolSize(), threadFactory);
     }
 
     @Bean
     GrpcRetryInterceptor fragranceServiceRetryInterceptor(
-            @Qualifier("fragranceServiceProperties") GrpcProperties props,
             Logger logger,
-            @Qualifier("fragranceServiceRetryScheduler") ScheduledExecutorService fragranceServiceRetryScheduler) {
+            @Qualifier("fragranceServiceProperties") GrpcProperties props,
+            @Qualifier("fragranceServiceRetryScheduler") ScheduledExecutorService fragranceServiceRetryScheduler
+    ) {
         return new GrpcRetryInterceptor(
+                logger,
                 props.getRetry().getMaxAttempts(),
                 props.getRetry().getInitialBackoff(),
                 props.getRetry().getMaxBackoff(),
                 props.getRetry().getMultiplier(),
                 props.getRetry().getPerAttemptTimeout(),
-                logger,
                 fragranceServiceRetryScheduler);
     }
 
@@ -64,7 +67,8 @@ public class FragranceGrpcConfig {
     ManagedChannel fragranceServiceChannel(
             @Qualifier("fragranceServiceProperties") GrpcProperties props,
             GrpcRetryInterceptor fragranceServiceRetryInterceptor,
-            GrpcMetricsInterceptor fragranceServiceMetricsInterceptor) {
+            GrpcMetricsInterceptor fragranceServiceMetricsInterceptor
+    ) {
         return ManagedChannelBuilder
                 .forAddress(props.getHost(), props.getPort())
                 .usePlaintext()
@@ -75,8 +79,8 @@ public class FragranceGrpcConfig {
 
     @Bean
     FragranceServiceGrpc.FragranceServiceBlockingV2Stub fragranceServiceStub(
-            ManagedChannel fragranceServiceChannel,
-            @Qualifier("fragranceServiceProperties") GrpcProperties props) {
+            ManagedChannel fragranceServiceChannel
+    ) {
         return FragranceServiceGrpc.newBlockingV2Stub(fragranceServiceChannel);
     }
 }
