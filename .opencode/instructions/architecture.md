@@ -65,4 +65,4 @@ return ResponseEntity.ok(ResponseFragranceConverter.createResultToResponse(fragr
 
 Значения из `application.yml`: REST `8087`, management `8086`, inbound gRPC `50053`, внешний fragrance gRPC `localhost:50051`. Actuator доступен как `/health`, `/metrics`, `/prometheus` на management-порту. В Dockerfile и Compose есть документированное расхождение с этими портами; не используй их как источник истины.
 
-При изменении архитектурного решения обновляй `ARCHITECTURE.md`; при изменении пользовательского поведения -- `README.md`.
+При изменении архитектурного решения обновляй `ARCHITECTURE.md`; при изменении пользовательского поведения -- `README.md`. Для каждого задания создай `promts/<kebab-case-name>.md` с полным текстом задания и добавь в конец `REPORT.md` запись с датой, фактическим результатом и ссылкой на этот файл. Подробный обязательный формат определяет корневой `AGENTS.md`.
