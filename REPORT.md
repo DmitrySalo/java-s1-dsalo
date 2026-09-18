@@ -1,5 +1,17 @@
 # Журнал работ
 
+## 2026-09-18 -- Актуализация инструкций модуля my-scents
+
+**Задание:** текущее пользовательское обращение в OpenCode.
+
+Обновлён `my-scents/AGENTS.md` по корневым правилам, `ARCHITECTURE.md` и `.opencode/instructions`. В модульной инструкции зафиксированы Java 25/Spring Boot 3.5.6, MongoDB через `MongoTemplate`, границы Clean/Hexagonal Architecture, REST/gRPC/Kafka контракты, Protobuf-совместимость, retry/DLT, безопасность, наблюдаемость, команды Gradle и выбор тестов. Удалены устаревшие ссылки на Java 21, Spring Boot 4.1.0, JPA, Flyway, PostgreSQL и несуществующую задачу `verify`.
+
+## 2026-09-18 -- Актуализация инструкций для агентов и разработчиков
+
+**Задание:** текущее пользовательское обращение в OpenCode.
+
+Актуализированы все файлы `.opencode/instructions` по фактической архитектуре «Ароматеки». Инструкции теперь фиксируют Java 25/Spring Boot/MongoDB стек, границы `boundary`/`domain`/`adapter`/`infra`, текущие REST-, gRPC- и Kafka-контракты, правила расширения Protobuf и обработки событий, Testcontainers-проверки, эксплуатационные ограничения и отсутствие frontend-модуля. Удалены неприменимые требования JPA/Flyway/PostgreSQL и React/Vitest; добавлены проектные пошаговые сценарии и примеры реализации.
+
 ## 2026-09-18 -- Исследование архитектуры и актуализация документации
 
 **Задание:** [research-task-1.md](promts/research-task-1.md).
