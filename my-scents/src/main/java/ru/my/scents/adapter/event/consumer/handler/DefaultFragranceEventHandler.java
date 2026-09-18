@@ -51,7 +51,7 @@ class DefaultFragranceEventHandler implements EventHandler<FragranceEvent> {
     }
 
     private Command delete() {
-        return event -> fragranceUseCase.delete(event.getEventId());
+        return event -> fragranceUseCase.delete(event.getPayload().getId());
     }
 
     @FunctionalInterface
