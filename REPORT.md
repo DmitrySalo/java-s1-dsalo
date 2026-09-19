@@ -47,3 +47,15 @@
 **Задание:** [verify-ai-instructions.md](promts/verify-ai-instructions.md).
 
 Выполнен изолированный bugfix обработки Kafka delete-event: ID парфюма теперь берётся из `payload.id`. Добавлен регрессионный unit-тест с различающимися `event_id` и `payload.id`; результаты проверок и независимого ревью зафиксированы в `HOMEWORK_REPORT.md`.
+
+## 2026-09-19 -- Добавление Python и LangChain агентов
+
+**Задание:** [add-python-langchain-agents.md](promts/add-python-langchain-agents.md).
+
+Добавлены senior-конфигурации разработчиков и ревьюеров Python и LangChain, тематические инструкции и skills. В `scripts/AGENTS.md` закреплены правила безопасной разработки Python-скриптов и LangChain-агентов; корневой `AGENTS.md` дополнен ссылками на новые роли и независимое ревью.
+
+## 2026-09-19 -- Специализированные Python и LangChain инструкции
+
+**Задание:** [python-langchain-specialized-instructions.md](promts/python-langchain-specialized-instructions.md).
+
+Добавлены отдельные инструкции и skills для API-контрактов, безопасности и тестирования Python и LangChain. Конфигурации агентов, базовые skills и `scripts/AGENTS.md` теперь ссылаются на специализированные правила вместо Java-ориентированных инструкций.

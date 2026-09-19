@@ -4,6 +4,8 @@
 
 Эти инструкции специализируют **OpenCode** для проекта «Ароматека». OpenCode читает корневой `AGENTS.md`, затем ближайший `AGENTS.md` модуля, конфигурацию агентов из `.opencode/agents/` и тематические правила из `.opencode/instructions/`.
 
+Для Python-кода используй `.opencode/agents/python-developer.md`, `python-code-reviewer.md`, инструкции `python-style.md`, `python-api-contracts.md`, `python-security.md`, `python-testing.md` и skills `python-development`/`python-code-review`/`python-api-contracts`/`python-security`/`python-testing`. Для LangChain-агентов используй `langchain-developer.md`, `langchain-reviewer.md`, инструкции `langchain.md`, `langchain-api-contracts.md`, `langchain-security.md`, `langchain-testing.md` и skills `langchain-agents`/`langchain-review`/`langchain-api-contracts`/`langchain-security`/`langchain-testing`. Правила для скриптов находятся в `scripts/AGENTS.md`.
+
 «Ароматека» -- модульный монолит на Java 25 и Spring Boot. Приложение ведёт персональные карточки пользователей и парфюмов, хранит их в MongoDB, предоставляет REST и gRPC-интерфейсы и обменивается событиями парфюмов через Kafka. Руководство по запуску находится в `README.md`; фактическая архитектура, интеграции и известные ограничения -- в `ARCHITECTURE.md`.
 
 ### Мини-глоссарий
@@ -92,6 +94,7 @@
 - До первого изменения проверить, что активна отдельная ветка `feature/<kebab-case-name>`, созданная от обновлённой локальной `main`.
 - Сохранить полный текст задания в новом `promts/<kebab-case-name>.md`.
 - Для backend-изменения запросить независимое ревью агента `code-reviewer`, устранить подтверждённые замечания либо явно сообщить о принятом риске.
+- Для Python-изменения запросить независимое ревью агента `python-code-reviewer`, а для LangChain-изменения -- `langchain-reviewer`; устранить подтверждённые замечания либо явно сообщить о принятом риске.
 - Запустить минимальную релевантную проверку, затем предусмотренные модулем тесты и сборку, если изменён production-код, Protobuf или build-конфигурация.
 - Добавить последней запись в `REPORT.md`, проверить ссылку на prompt-файл и добавить в Git только файлы текущей задачи без commit.
 - В итоговом ответе перечислить ветку, изменённые файлы, ревью и результаты команд.
