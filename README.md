@@ -13,6 +13,7 @@
 │   ├── src/main/proto/         # Protobuf-контракты gRPC и Kafka
 │   ├── src/test/               # Тесты и тестовая конфигурация
 │   └── Dockerfile              # Сборка и запуск контейнера приложения
+├── langchain-agent/            # Локальный Python/LangChain REST-клиент my-scents
 ├── scripts/                    # Скрипты Kafka и Schema Registry
 ├── docker-compose.yaml         # Локальная инфраструктура
 ├── ARCHITECTURE.md             # Архитектурная документация
@@ -25,6 +26,8 @@
 Модуль `my-scents` собирается Gradle Wrapper 9.1.0 с Java 25 и Spring Boot 3.5.6. Данные хранятся в MongoDB; для интеграций используются gRPC, Protocol Buffers и Apache Kafka. Локальная инфраструктура определена в `docker-compose.yaml`.
 
 Все явно зафиксированные версии зависимостей, плагинов и образов перечислены в [ARCHITECTURE.md](ARCHITECTURE.md#технологии-и-версии).
+
+`langchain-agent` -- отдельный учебный Python 3.11+ сервис на LangChain, Ollama, FastAPI, HTTPX и Pydantic. Он вызывает только публичный REST API карточек парфюмов; изменяющие операции требуют одноразовый `prepared_operation_id` и явное подтверждение. Запуск, CLI и ограничения описаны в [langchain-agent/README.md](langchain-agent/README.md). До реализации TD-5 сервис предназначен только для локальной среды.
 
 ## Предварительные требования
 
@@ -70,6 +73,15 @@ docker compose up -d mongodb kafka schema-registry schema-registry-init fragranc
 
 3. При запуске из Gradle приложение слушает REST-порт `8087`, management-порт `8086` и входящий gRPC-порт `50053`. Внешний gRPC-сервис по умолчанию ожидается на `localhost:50051`.
 
+Для учебной проверки LangChain-агента включите явный профиль `local`; только в нём REST API и локальные actuator endpoints доступны без аутентификации:
+
+```shell
+$env:SPRING_PROFILES_ACTIVE = "local"
+./my-scents/gradlew.bat :my-scents:bootRun
+```
+
+Профиль `local` предназначен исключительно для изолированного запуска на машине разработчика. Он не включается по умолчанию и не является security-политикой для production.
+
 Actuator: `http://localhost:8086/health`, `http://localhost:8086/metrics`, `http://localhost:8086/prometheus`.
 
 В `docker-compose.yaml` и `my-scents/Dockerfile` есть расхождения с `application.yml` по HTTP/management-портам и health check. Поэтому контейнерный запуск `my-scents-app` требует отдельной проверки и согласования конфигурации перед использованием.
@@ -110,4 +122,4 @@ REST-контроллеры реализуют CRUD без path variables; ид�
 
 - [ARCHITECTURE.md](ARCHITECTURE.md) -- архитектура, контракты, технологии, развёртывание и ограничения.
 - [REPORT.md](REPORT.md) -- журнал документирующих работ.
-- [promts/research-task-1.md](promts/research-task-1.md) -- исходное задание исследования.
+- [langchain-agent/README.md](langchain-agent/README.md) -- руководство отдельного учебного agent-service.

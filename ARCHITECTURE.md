@@ -17,7 +17,7 @@
 - **DDD tactical patterns:** `User` и `Fragrance` -- сущности (entity); ID, имя, email, телефон, рейтинг и описание -- value objects. Текущие ограниченные контексты: `user` и `fragrance`.
 - **Явные контракты:** HTTP DTO не являются доменными сущностями; gRPC и Kafka-контракты заданы Protobuf-файлами.
 - **Наблюдаемость и устойчивость:** JSON-логи с MDC, Actuator/Micrometer, Mongo/gRPC-метрики, gRPC deadline и retry, Kafka retry topics и DLT.
-- **Эволюционность:** модульный монолит является текущей единицей поставки; отдельный сервис следует выделять только при независимом владении данными и жизненном цикле.
+- **Эволюционность:** модульный монолит является текущей единицей поставки; отдельный сервис следует выделять только при независимом владении данными и жизненном цикле. Исключение для `langchain-agent`: это учебный внешний клиент публичного API, а не владелец доменных данных и не выделенный bounded context.
 
 ### Фактические отступления от строгой Clean Architecture
 
@@ -66,6 +66,11 @@ Kafka topic ─┘                                      │
 │   ├── src/main/resources/                 # Spring и Logback configuration
 │   ├── src/test/                           # Тесты, stubs, Testcontainers config
 │   └── gripmock/fragrance/stubs/           # Mock-сценарии gRPC
+├── langchain-agent/                         # Отдельный Python/LangChain REST-клиент my-scents
+│   ├── app/                                 # FastAPI, policy, tool и HTTP-клиент
+│   ├── prompts/                             # Trusted prompts агента
+│   ├── tests/                               # Изолированные Python-тесты
+│   └── examples/                            # Результаты контрольных проверок
 └── scripts/
     ├── schema-registry/                    # Регистрация Protobuf schemas
     └── kafka/                              # Python-инструменты Kafka
@@ -94,6 +99,51 @@ Kafka topic ─┘                                      │
 | `infra.http` | HTTP filter/interceptor и MDC-корреляция запросов. |
 | `infra.logger` | Интерфейс логгера, SLF4J-реализация и асинхронная очередь. |
 | `shared.converter` | Преобразование timestamp и enum домена/Protobuf. |
+
+## Сервис LangChain-агента
+
+`langchain-agent` -- самостоятельный Python 3.11+ сервис на LangChain, LangChain Ollama, FastAPI, HTTPX, Pydantic и Uvicorn. Он является потребителем публичного REST API `my-scents`, не владеет доменными данными и не меняет границы модульного монолита.
+
+Агент получает `MY_SCENTS_BASE_URL`, `OLLAMA_BASE_URL` и `OLLAMA_MODEL` только из окружения или локального `.env`; `.env` не коммитится. Интеграционная граница ограничена `POST`, `GET` и `PUT /api/v1/fragrances`. У сервиса нет доступа к MongoDB, Kafka, Schema Registry, gRPC, Docker socket или внутренним Java-пакетам.
+
+Программный allowlist в HTTP-клиенте и tool запрещает произвольные URL, методы, shell и файловую систему. `fragrance_api` подключён к LangChain `create_agent`, но его выполнение требует временного разрешения программного policy layer. Create/update возвращают `confirmation_required` с одноразовым `prepared_operation_id`, действительным пять минут, и выполняются лишь при `confirmed=true` с этим ID. Tool выводит в stderr логи `TOOL_CALL` и `TOOL_RESULT`, содержащие только operation, method, path и безопасный resource ID, без body, токенов, URI с credentials и персональных данных. `GET /health` проверяет agent-service и не раскрывает состояние `my-scents`. До завершения TD-5 сервис разрешён только для локальной учебной среды.
+
+### Сценарии работы агента
+
+| Сценарий | Действие агента | API-вызов |
+| --- | --- | --- |
+| Создать карточку | Формирует ограниченный payload, возвращает подготовленную операцию, ждёт подтверждения | После подтверждения `POST /api/v1/fragrances` |
+| Получить карточку | Валидирует UUID и вызывает tool | `GET /api/v1/fragrances?fragranceId=...` |
+| Обновить карточку | Формирует полный поддерживаемый payload и ждёт подтверждения | После подтверждения `PUT /api/v1/fragrances` |
+| Справка | Возвращает допустимые возможности | Нет tool-вызова |
+| Ошибка API | Возвращает безопасный контракт без неконтролируемого retry | Нет повторного вызова |
+
+```text
+Natural-language request
+  -> LangChain agent
+  -> parse intent and validate tool input
+  -> confirmation_required
+  -> explicit confirmation
+  -> LangChain tool
+  -> MyScentsClient
+  -> public REST API my-scents
+  -> normalized agent response
+```
+
+### Структура LangChain-сервиса
+
+| Компонент | Назначение |
+| --- | --- |
+| `app/main.py` | HTTP-вход FastAPI: health и команда агента. |
+| `app/cli.py` | CLI-вход той же прикладной логики. |
+| `app/agent/factory.py` | Собирает `ChatOllama` и LangChain `create_agent`. |
+| `app/agent/tools.py` | Единственный allowlisted HTTP tool. |
+| `app/agent/response.py` | Нормализует обязательный контракт ответа. |
+| `app/agent/service.py` | Программно применяет confirmation policy. |
+| `app/my_scents/client.py` | HTTP-клиент публичного REST API. |
+| `app/my_scents/models.py` | Ограничивает поля JSON и enum. |
+| `prompts/*.md` | Trusted system prompt и примеры запросов. |
+| `examples/verification-results.md` | Контрольные результаты и безопасные traces. |
 
 ## Доменные данные
 
@@ -124,7 +174,7 @@ MongoDB используется без Spring Data repositories: реализа
 
 ### Безопасность API
 
-Подключён Spring Security, но `SecurityFilterChain`, пользователи и правила доступа отсутствуют. Политика доступа не зафиксирована явно. Перед production необходимо утвердить аутентификацию, resource-level authorization по владельцу карточки, защиту management endpoints, TLS для gRPC/Kafka/MongoDB и ограничения входных payload.
+По умолчанию применяется Spring Security auto-configuration. Явный профиль `local` определяет отдельную `SecurityFilterChain`, отключает CSRF и разрешает unauthenticated requests только для изолированной учебной проверки LangChain-агента; он не включается по умолчанию и не предназначен для production. Перед production необходимо утвердить аутентификацию, resource-level authorization по владельцу карточки, защиту management endpoints, TLS для gRPC/Kafka/MongoDB и ограничения входных payload.
 
 ## Технологии и версии
 

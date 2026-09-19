@@ -47,3 +47,45 @@
 **Задание:** [verify-ai-instructions.md](promts/verify-ai-instructions.md).
 
 Выполнен изолированный bugfix обработки Kafka delete-event: ID парфюма теперь берётся из `payload.id`. Добавлен регрессионный unit-тест с различающимися `event_id` и `payload.id`; результаты проверок и независимого ревью зафиксированы в `HOMEWORK_REPORT.md`.
+
+## 2026-09-19 -- Добавление Python и LangChain агентов
+
+**Задание:** [add-python-langchain-agents.md](promts/add-python-langchain-agents.md).
+
+Добавлены senior-конфигурации разработчиков и ревьюеров Python и LangChain, тематические инструкции и skills. В `scripts/AGENTS.md` закреплены правила безопасной разработки Python-скриптов и LangChain-агентов; корневой `AGENTS.md` дополнен ссылками на новые роли и независимое ревью.
+
+## 2026-09-19 -- Специализированные Python и LangChain инструкции
+
+**Задание:** [python-langchain-specialized-instructions.md](promts/python-langchain-specialized-instructions.md).
+
+Добавлены отдельные инструкции и skills для API-контрактов, безопасности и тестирования Python и LangChain. Конфигурации агентов, базовые skills и `scripts/AGENTS.md` теперь ссылаются на специализированные правила вместо Java-ориентированных инструкций.
+
+## 2026-09-19 -- Учебный LangChain-сервис для публичного API парфюмов
+
+**Задание:** [langchain-my-scents-agent.md](promts/langchain-my-scents-agent.md).
+
+Добавлен отдельный локальный Python-сервис `langchain-agent` с ограниченным REST-клиентом, Pydantic-моделями текущего контракта парфюмов, LangChain/ChatOllama intent parser, allowlisted tool, программным подтверждением мутаций, FastAPI и CLI. Добавлены изолированные тесты, Compose profile, документация архитектурных границ и технического долга. Реальные сквозные сценарии с Ollama и my-scents не выполнялись и не задокументированы как успешные.
+
+## 2026-09-19 -- Проверка соответствия LangChain-плану
+
+**Задание:** [check-langchain-plan-compliance.md](promts/check-langchain-plan-compliance.md).
+
+Проверено соответствие `langchain-agent` плану разработки. `fragrance_api` подключён к LangChain-агенту и защищён программным policy layer; подтверждение мутаций использует одноразовый ID с TTL и не вызывает LLM повторно. Исправлена API-регрессия теста и добавлены проверки replay-защиты и безопасных логов. Реальные сквозные сценарии с Ollama и my-scents остаются невыполненными.
+
+## 2026-09-19 -- Сквозная проверка LangChain-агента
+
+**Задание:** [langchain-homework-verification.md](promts/langchain-homework-verification.md).
+
+Выполнены пять реальных LLM-запросов через локальные Ollama и LangChain-агент, а также три upstream-операции `POST`/`GET`/`PUT` против локального `my-scents`. Добавлен `LANGCHAIN_HOMEWORK_REPORT.md` с настройкой модели, границами API, командами запуска и результатами. Для локального Ollama явно подключена JSON Schema-стратегия структурированного вывода; добавлен регрессионный тест её выбора.
+
+## 2026-09-19 -- Устранение недочётов проверки LangChain homework
+
+**Задание:** [fix-langchain-homework-compliance.md](promts/fix-langchain-homework-compliance.md).
+
+Синхронизированы доказательства сквозной проверки: зафиксированы пять разных запросов, включая неподтверждённое создание без tool-вызова, и три подтверждённых HTTP-операции с `200 OK`. Обновлён фактический результат изолированного набора тестов (`27 passed, 1 warning`); в `LANGCHAIN_HOMEWORK_REPORT.md` добавлены точные ссылки на реализацию LangChain tool, HTTP-вызова, безопасных логов, контракта ответа и промптов. Устранено ошибочное утверждение архитектурного документа о логировании HTTP-статуса tool.
+
+## 2026-09-19 -- Финальная проверка и устранение недочётов LangChain homework
+
+**Задание:** [final-langchain-homework-compliance.md](promts/final-langchain-homework-compliance.md).
+
+Для LangChain tool включён самостоятельный безопасный INFO-вывод `TOOL_CALL`/`TOOL_RESULT` в stderr при штатном запуске, без body, URL и учётных данных. Документация дополнена воспроизводимой подготовкой Ollama и явным списком использованных промптов. Добавлены изолированные проверки console-лога, передачи естественно-языкового ввода планировщику, маршрутизации `get`, запрета недопустимого намерения и подключения system prompt.

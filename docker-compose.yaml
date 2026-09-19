@@ -84,6 +84,21 @@ services:
       retries: 5
       start_period: 30s
 
+  langchain-agent:
+    build:
+      context: ./langchain-agent
+    profiles: ["agent"]
+    restart: "no"
+    depends_on:
+      my-scents-app:
+        condition: service_healthy
+    ports:
+      - "127.0.0.1:8091:8091"
+    environment:
+      MY_SCENTS_BASE_URL: http://my-scents-app:8087
+      OLLAMA_BASE_URL: ${OLLAMA_BASE_URL:-http://host.docker.internal:11434}
+      OLLAMA_MODEL: ${OLLAMA_MODEL:-llama3.2}
+
   kafka:
     image: confluentinc/cp-kafka:7.6.0
     container_name: kafka
