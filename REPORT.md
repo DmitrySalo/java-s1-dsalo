@@ -89,3 +89,9 @@
 **Задание:** [final-langchain-homework-compliance.md](promts/final-langchain-homework-compliance.md).
 
 Для LangChain tool включён самостоятельный безопасный INFO-вывод `TOOL_CALL`/`TOOL_RESULT` в stderr при штатном запуске, без body, URL и учётных данных. Документация дополнена воспроизводимой подготовкой Ollama и явным списком использованных промптов. Добавлены изолированные проверки console-лога, передачи естественно-языкового ввода планировщику, маршрутизации `get`, запрета недопустимого намерения и подключения system prompt.
+
+## 2026-09-19 -- Каркас разработки MCP-сервера
+
+**Задание:** [mcp-server-foundation.md](promts/mcp-server-foundation.md).
+
+Создана ветка `feature/mcp-server-foundation` от указанной `feature/python-langchain-agents`. Добавлены специализированные MCP-роли, инструкции и skills для Java MCP-сервера с `stdio`, файловым sandbox, allowlist процессов, тестированием и независимым ревью. Создан пустой модуль `mcp-server` с локальными правилами разработки; SDK, сборка и реализация tools пока не добавлялись.
