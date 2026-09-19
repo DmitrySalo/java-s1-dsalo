@@ -1,0 +1,45 @@
+plugins {
+    id 'application'
+    id 'java'
+}
+
+group = 'ru.my.scents'
+version = '0.1.0-SNAPSHOT'
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(25)
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'io.modelcontextprotocol.sdk:mcp-core:0.18.4'
+    implementation 'io.modelcontextprotocol.sdk:mcp-json-jackson2:0.18.4'
+    implementation 'net.java.dev.jna:jna:5.17.0'
+    implementation 'net.java.dev.jna:jna-platform:5.17.0'
+    runtimeOnly 'org.slf4j:slf4j-nop:2.0.17'
+
+    testImplementation platform('org.junit:junit-bom:5.13.4')
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+    testImplementation 'org.assertj:assertj-core:3.27.6'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
+
+application {
+    mainClass = 'ru.my.scents.mcp.McpServerApplication'
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+    dependsOn tasks.named('installDist')
+    if (System.getProperty('mcp.skip.stdio.smoke') != null) {
+        systemProperty 'mcp.skip.stdio.smoke', System.getProperty('mcp.skip.stdio.smoke')
+    }
+    javaLauncher = javaToolchains.launcherFor {
+        languageVersion = JavaLanguageVersion.of(25)
+    }
+}

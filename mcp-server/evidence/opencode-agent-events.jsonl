@@ -1,0 +1,6 @@
+{"type":"mcp_connection","server":"my-scents-local","status":"connected","command":"opencode mcp list"}
+{"type":"tool_use","sessionID":"ses_f44dcbd14ffetj7zsWgcI6mkWl","callID":"call_ldZNXLr2bL5AgEuqTLZHmrwN","tool":"my-scents-local_get_local_documentation","input":{"query":"local tool safety"},"output":"No documentation matches found."}
+{"type":"tool_use","sessionID":"ses_f44dcbcddffefZNYrHU3wzLNcQ","callID":"call_WaCpHKXmyNT0rmjflw5tHGYu","tool":"my-scents-local_get_local_documentation","input":{"query":"stdio"},"output":"Documentation matches found."}
+{"type":"tool_use","sessionID":"ses_f44dc0809ffeoqW3UgdXWjWkfW","callID":"call_v688Xa3692cFJsHs6CndcwKw","tool":"my-scents-local_search_project","input":{"query":"ToolResult","path_prefix":"mcp-server/src","max_results":50},"output":"Project matches found."}
+{"type":"tool_use","sessionID":"ses_f44dcbd18ffexhp2kn16DPraGd","callID":"call_WNx3RpTwOO5B6uVqxwrOkyuX","tool":"my-scents-local_run_project_check","input":{"check":"mcp_tests"},"output":"Project check completed."}
+{"type":"tool_use","sessionID":"ses_f44dc082bffeK94RFr3jPC1tN0","callID":"call_l0ax8AzrJlgq6IXyaxtYnjLS","tool":"my-scents-local_search_project","input":{"query":"SafeToolLogger","path_prefix":"mcp-server/src","max_results":50},"output":"Project matches found."}

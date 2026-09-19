@@ -95,3 +95,93 @@
 **Задание:** [mcp-server-foundation.md](promts/mcp-server-foundation.md).
 
 Создана ветка `feature/mcp-server-foundation` от указанной `feature/python-langchain-agents`. Добавлены специализированные MCP-роли, инструкции и skills для Java MCP-сервера с `stdio`, файловым sandbox, allowlist процессов, тестированием и независимым ревью. Создан пустой модуль `mcp-server` с локальными правилами разработки; SDK, сборка и реализация tools пока не добавлялись.
+
+## 2026-09-19 -- Локальный MCP-сервер с безопасными tools
+
+**Задание:** [mcp-server-development-plan.md](promts/mcp-server-development-plan.md).
+
+Создан автономный Java 25 MCP stdio-модуль с официальным MCP Java SDK, tool для локальной документации, ограниченным поиском по trusted project root и статическим allowlist проверок. Добавлены filesystem sandbox, bounded process output, безопасные stderr-логи, Gradle Wrapper, тесты, документация и шаблоны конфигураций OpenCode, IntelliJ IDEA и VS Code. Независимое review подтвердило и после исправления перепроверены критичные границы stdout, файлового доступа и process output. Интерактивная приёмка в IDE и screenshots не выполнены: в текущей среде недоступен интерактивный MCP-клиент; evidence честно помечено pending.
+
+## 2026-09-19 -- Настройка OpenCode для локального MCP-сервера
+
+**Задание:** [configure-opencode-mcp.md](promts/configure-opencode-mcp.md).
+
+Собран application distribution MCP-сервера через `installDist`. В корневой `opencode.json` добавлен локальный `stdio`-сервер `my-scents-local`, запускающий distribution launcher с trusted project root `.`. Шаблон OpenCode-конфигурации синхронизирован: недопустимый placeholder `${workspaceFolder}` заменён на относительное значение `.`.
+
+## 2026-09-19 -- Приёмка MCP-инструментов через OpenCode
+
+**Задание:** [mcp-ide-acceptance.md](promts/mcp-ide-acceptance.md).
+
+OpenCode 1.18.3 подтвердил подключение `my-scents-local`. Реальный MCP `stdio`-сеанс подтвердил initialize и выполнил пять tool calls: local documentation, project search, MCP tests, backend tests и документацию stdio. Четыре сценария завершились успешно; backend check вернул `exit_code: 1`, поскольку Windows не запускает `.bat` напрямую через `ProcessBuilder`, а shell запрещён policy. Сохранён безопасный текстовый trace без путей, токенов, `.env` и персональных данных. Скриншоты не созданы: интерактивное окно IDE в среде недоступно, synthetic evidence сознательно не добавлялось.
+
+## 2026-09-19 -- Перевод отчёта MCP-сервера на русский язык
+
+**Задание:** [translate-mcp-homework-report.md](promts/translate-mcp-homework-report.md).
+
+Содержимое `mcp-server/MCP_SERVER_HOMEWORK_REPORT.md` переведено на русский язык без изменения ссылок на код, фактических результатов приёмки и описанного ограничения запуска `backend_tests` на Windows.
+
+## 2026-09-19 -- Перевод документации и evidence MCP-сервера на русский язык
+
+**Задание:** [translate-mcp-docs-and-evidence.md](promts/translate-mcp-docs-and-evidence.md).
+
+На русский язык переведены все Markdown-файлы в `mcp-server/docs` и текстовый trace в `mcp-server/evidence`. Имена tools, переменных окружения, файлов, команды и фактические безопасные stderr-события сохранены без изменения.
+
+## 2026-09-19 -- Устранение рисков и недоработок MCP-сервера
+
+**Задание:** [fix-mcp-server-compliance.md](promts/fix-mcp-server-compliance.md).
+
+Исправлен контракт process tool: неуспешный exit code возвращает структурированную ошибку, allowlist сокращён до воспроизводимой фиксированной проверки MCP-модуля, а вывод дочернего процесса не передаётся MCP-клиенту. При timeout завершается процесс и его descendants. Добавлены изолированные проверки contract/logging, process error/timeout и ограничений filesystem sandbox; документация, OpenCode-steps, JSON-RPC evidence и `MCP_SERVER_HOMEWORK_REPORT.md` дополнены воспроизводимыми подтверждениями с диапазонами строк. Независимое MCP review выявило и после исправления подтвердило устранение рисков process output и timeout; для запуска distribution требуется JDK 25 в `JAVA_HOME`.
+
+## 2026-09-19 -- Полное закрытие критериев MCP-сервера
+
+**Задание:** [complete-mcp-server-acceptance.md](promts/complete-mcp-server-acceptance.md).
+
+Устранены выявленные риски файлового чтения и process output: разрешённый файл повторно проверяется и открывается с `NOFOLLOW_LINKS`, а output allowlisted Gradle-проверки полностью дренируется после достижения лимита без передачи клиенту и ожидание reader ограничено. Добавлены негативные проверки absolute/platform-invalid path, symbolic links и лимита обхода файлов, а также автоматический stdio smoke-test distribution launcher для `initialize`, `tools/list`, input schema, tool call, JSON-RPC-only stdout и безопасных stderr-логов. Повторный OpenCode MCP status с JDK 25 подтвердил `my-scents-local connected`; README, evidence и отчёт дополнены проверяемыми ссылками. Повторный независимый review-agent временно недоступен из-за исчерпанного upstream request budget; замечания первого независимого review устранены и проверены регрессионными тестами.
+
+## 2026-09-19 -- Исправление замечаний проверки MCP-сервера
+
+**Задание:** [fix-mcp-review-findings.md](promts/fix-mcp-review-findings.md).
+
+Устранено падение search-tool на binary fixtures, запрещён поиск файлов с чувствительными именами, добавлены лимит обхода documentation и безопасная обработка runtime I/O ошибок. С JDK 25 успешно выполнены tests, build, distribution smoke-test и подключение OpenCode; сохранены фактические session/call identifiers пяти вызовов MCP tools агентом OpenCode. Обновлены README, evidence и отчёт с точными ссылками на код и контракт результата.
+
+## 2026-09-20 -- Полное закрытие критериев MCP-сервера
+
+**Задание:** [complete-mcp-server-criteria.md](promts/complete-mcp-server-criteria.md).
+
+Ограничен анализ каждой строки поиска первыми 500 символами и добавлен регрессионный тест. Удалены конфигурации IntelliJ IDEA и VS Code: единственным поддерживаемым MCP-клиентом оставлен OpenCode. Сохранены новые фактические события пяти вызовов tools агентом OpenCode, а smoke-test повторяет их безопасные signatures, подтверждая server stderr и JSON-RPC-only stdout. Обновлены README, evidence и отчёт приёмки с ссылками на код и диапазоны строк.
+
+## 2026-09-20 -- Устранение замечаний приёмки MCP-сервера
+
+**Задание:** [fix-mcp-acceptance-review.md](promts/fix-mcp-acceptance-review.md).
+
+Исправлен путь к примеру конфигурации OpenCode в воспроизводимой инструкции. Для MCP SDK 0.18.4 добавлена явная boundary-проверка входных параметров tools: обязательные и лишние поля, отсутствующий или пустой `arguments`, JSON-типы, длины, диапазоны и enum отклоняются структурированной ошибкой до запуска реализации; `stdio` smoke-test покрывает двенадцать таких отрицательных запросов и полный error contract. Логи не преобразуют произвольный JSON input в строку; проверен безопасный отказ object вместо string с последующим валидным вызовом. Уточнена граница доверия файлового sandbox: configured `MCP_PROJECT_ROOT` должен быть неизменяемым для параллельных процессов. Актуализированы архитектурная дата, версия MCP SDK и ссылки отчёта приёмки.
+
+## 2026-09-20 -- Устранение рисков файлового sandbox MCP-сервера
+
+**Задание:** [fix-mcp-sandbox-risks.md](promts/fix-mcp-sandbox-risks.md).
+
+Поисковые MCP tools используют ограниченные immutable snapshots, поэтому не читают файлы во время tool-вызова; добавлены лимиты snapshot, безопасные structured errors при недоступном initial scan и denylist вариантов имён секретных файлов. Дополнены regression-, stdio smoke-тесты, документация, архитектура и отчёт приёмки. Initial scan по-прежнему требует неизменяемого trusted root на Windows из-за отсутствия portable descriptor-relative Java NIO API.
+
+## 2026-09-20 -- Устранение неограниченного вывода MCP-проверки
+
+**Задание:** [fix-mcp-process-output-limit.md](promts/fix-mcp-process-output-limit.md).
+
+Для `run_project_check` добавлен общий лимит 8 KiB объединённого вывода дочернего процесса. При его превышении сервер завершает process tree и возвращает безопасную структурированную ошибку `OUTPUT_LIMIT_EXCEEDED`, не передавая child-process output MCP-клиенту. Добавлен регрессионный тест остановки процесса, обновлены README и отчёт приёмки; будут повторно выполнены модульные, stdio, OpenCode и security-проверки.
+
+## 2026-09-20 -- Полная проверка критериев MCP-сервера
+
+**Задание:** [verify-mcp-server-criteria.md](promts/verify-mcp-server-criteria.md).
+
+Повторно успешно выполнены узкий process-regression test, stdio smoke-test distribution launcher, полный test, build и installDist. OpenCode подтвердил подключение `my-scents-local` и фактически вызвал `run_project_check(mcp_tests)` с успешным результатом. Проверены trace пяти запросов, code links, server stderr logging и отсутствие отслеживаемых секретов. После независимого review возвращён кроссплатформенный fallback завершения descendants до и после остановки parent process; непроверяемая native Windows Job Object реализация сохранена как ранее staged работа и не используется.
+
+## 2026-09-20 -- Windows Job containment для проверки проекта
+
+**Задание:** [windows-job-process-containment.md](promts/windows-job-process-containment.md).
+
+Для `run_project_check` на Windows процесс создаётся через `CreateProcessW` в suspended state, назначается Job Object с `KILL_ON_JOB_CLOSE` и только затем возобновляется. Containment закрывается при штатном завершении, timeout, превышении output limit, interruption и ошибке reader. Добавлен реальный Windows integration test: JVM helper создаёт долгоживущий child process, после закрытия Job проверяется завершение обоих PID. Независимое MCP review выявило риск fallback Process API, stdin inheritance, quoting аргументов и cleanup теста; он устранён до повторного запуска targeted проверок. Полный `test` не завершился за увеличенный лимит из-за зависания существующего stdio smoke-test при вложенной Gradle-проверке; production build без тестов успешно выполнен.
+
+## 2026-09-20 -- Устранение зависания stdio smoke-test
+
+**Задание:** [fix-stdio-smoke-test-hang.md](promts/fix-stdio-smoke-test-hang.md).
+
+`StdioServerSmokeTest` больше не вызывает позитивный `run_project_check(mcp_tests)` и не запускает вложенный Gradle process. Он сохраняет protocol-boundary проверку недопустимого значения check; успешная маршрутизация валидного check через handler проверяется с fake process boundary, а контракт process tool и Windows Job containment -- отдельно изолированными и integration тестами. Это устраняет рекурсивную цепочку Gradle из MCP transport smoke-test.
