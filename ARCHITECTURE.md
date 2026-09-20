@@ -1,6 +1,6 @@
 # Архитектура проекта «Ароматека»
 
-**Статус:** описывает фактическую реализацию в репозитории на 2026-09-18.
+**Статус:** описывает фактическую реализацию в репозитории на 2026-09-20.
 **Система:** Gradle multi-project `java-s1-dsalo`; прикладной модуль `my-scents`; артефакт `ru.my.scents:my-scents:0.0.1-SNAPSHOT`.
 
 ## Назначение
@@ -71,6 +71,9 @@ Kafka topic ─┘                                      │
 │   ├── prompts/                             # Trusted prompts агента
 │   ├── tests/                               # Изолированные Python-тесты
 │   └── examples/                            # Результаты контрольных проверок
+├── mcp-server/                              # Изолированный Java MCP stdio server
+│   ├── src/main/java/                       # Tools, startup snapshot, filesystem policy, process allowlist и Windows Job containment
+│   └── docs/                                # Единственный источник local documentation tool
 └── scripts/
     ├── schema-registry/                    # Регистрация Protobuf schemas
     └── kafka/                              # Python-инструменты Kafka
@@ -184,6 +187,7 @@ MongoDB используется без Spring Data repositories: реализа
 | --- | --- | --- |
 | Java | 25 | Язык и toolchain. |
 | Gradle Wrapper | 9.1.0 | Сборка и запуск задач. |
+| MCP Java SDK | 0.18.4 | Локальный `stdio` MCP-сервер и tools модуля `mcp-server`. |
 | Spring Boot | 3.5.6 | Приложение, автоконфигурация и dependency BOM. |
 | Spring dependency-management plugin | 1.1.7 | Управление транзитивными версиями. |
 | Spring Boot Gradle plugin | 3.5.6 | Сборка исполняемого Boot JAR. |

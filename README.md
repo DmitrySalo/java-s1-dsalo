@@ -14,6 +14,7 @@
 │   ├── src/test/               # Тесты и тестовая конфигурация
 │   └── Dockerfile              # Сборка и запуск контейнера приложения
 ├── langchain-agent/            # Локальный Python/LangChain REST-клиент my-scents
+├── mcp-server/                 # Изолированный локальный Java MCP stdio server
 ├── scripts/                    # Скрипты Kafka и Schema Registry
 ├── docker-compose.yaml         # Локальная инфраструктура
 ├── ARCHITECTURE.md             # Архитектурная документация
@@ -123,3 +124,4 @@ REST-контроллеры реализуют CRUD без path variables; ид�
 - [ARCHITECTURE.md](ARCHITECTURE.md) -- архитектура, контракты, технологии, развёртывание и ограничения.
 - [REPORT.md](REPORT.md) -- журнал документирующих работ.
 - [langchain-agent/README.md](langchain-agent/README.md) -- руководство отдельного учебного agent-service.
+- [mcp-server/README.md](mcp-server/README.md) -- локальный учебный MCP-сервер и настройка клиентов.

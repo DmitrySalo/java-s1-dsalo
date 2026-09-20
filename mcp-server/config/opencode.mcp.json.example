@@ -1,7 +1,4 @@
 {
-  "$schema": "https://opencode.ai/config.json",
-  "default_agent": "build",
-  "subagent_depth": 2,
   "mcp": {
     "my-scents-local": {
       "type": "local",
@@ -11,14 +8,6 @@
       "environment": {
         "MCP_PROJECT_ROOT": ".."
       }
-    }
-  },
-  "permission": {
-    "read": {
-      "*": "allow",
-      "*.env": "deny",
-      "*.env.*": "deny",
-      "*.env.example": "allow"
     }
   }
 }
